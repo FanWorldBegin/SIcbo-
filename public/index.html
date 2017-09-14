@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=DEVICE-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta keyword="V6娱乐"/>
+    <link rel="shortcut icon" type="image/png" href="./favicon.png"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- <script src="https://vg06.net/js/platform.config.js"></script>
+    <script src="https://vg06.net/static/js/navigation.bundle.js"></script>
+    <script src="https://vg06.net/static/js/basicHelper.js"></script> -->
+    <title>Sic Bo</title>
+  </head>
+
+  <body>
+    <div id="Main">
+      <!-- React 容器 -->
+    </div>
+    <script>
+      window.SCRIPT_CND_URL = 'https://vg06.net/';
+      var SCRIPT_CND_URL = window.SCRIPT_CND_URL || '';
+       // var SCRIPT_CND_URL = window.SCRIPT_CND_URL || '//cdn-ccs.mookee.cn';
+      window.LoadScript = function(srcouce, callback, cdn) {
+        var cdn = typeof cdn == 'undefined' ? true: cdn;
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        document.body.appendChild(script);
+        script.src = (cdn ? SCRIPT_CND_URL : '') + srcouce;
+        script.onload = function(e) {
+          if(typeof callback === 'function') callback(e);
+        };
+      }
+      window.LoadLink = function(srcouce) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        document.body.appendChild(link);
+        link.href = SCRIPT_CND_URL + srcouce;
+      }
+    </script>
+    <script>
+      /**
+       * 服务器返回的Config
+       */
+      window.__none = '';
+      // window.__none = [75, 79, 75, 80, 79, 81, 79, 88];
+      window.getGateUrlFunc = (function() {
+        var nodes = {
+          // gateNodes: ["http://192.168.192.175:47779"],
+          gateNodes: [
+            "https://hh2beta.99safe.org:37779",
+            // "https://v666.99safe.org:37779",
+            // "https://12441.99safe.org:37779",
+            // "https://gate.66ag.net:37779",
+            // "https://gate.vg03.net:37779",
+            // "https://gate.vg08.net:37779",
+            // "https://gate.va04.net:37779",
+            // "https://gate.va66.net:37779"
+          ],
+          httpsNodes: ["https://hh2beta.99safe.org:37779", "https://v666.99safe.org:37779"]
+        };
+        window.ORIGINAL_GATE_URL = /https/.test(document.location.protocol) ? nodes.httpsNodes : nodes.gateNodes;
+      })(window);
+      window.GATE_URL = "https://hh2beta.99safe.org:37779/x"
+      window.DOMAIN_COLL_CDN = {"01ag.net":"","04ag.net":"","05ag.net":"","09ag.net":"v601.tailike.top","game.va02.net":"","game.va05.net":"","game.vg02.net":"","va03.net":"","va66.net":"","vg00.net":"","vg01.net":"","vg06.net":""};
+      window.ORIGINAL_RESOURCE_URL = "https://v601.tailike.top";
+      window.PLATFORM = "v6";
+      window.DOMAIN_COLL = ["https://vg06.net"];
+
+      window.___ENV = 'dev';
+
+      window.DEVICE = "pc_browser";
+      // window.DeviceInfo = "mobile";
+      // window.IsDesktopMode = false;
+      window.DeviceInfo = "desktop";
+      window.IsDesktopMode = true;
+      window.DefaultLaunchGameCode = 'CQSSC';
+
+      window.NoDispatchSystemAnnouncements = true;
+      // window.OnReceiveNewRecord
+    </script>
+    <script>
+      // function()
+      window.LoadScript('js/platform.config.js');
+      window.LoadScript('static/js/navigation.bundle.js');
+      window.LoadScript('static/js/basicHelper.js', function() {
+        initGame();
+      });
+      // function login() {
+      //   var postData = {"Header":{"Method":"trial_login","Platform":"v6","UserName":"suiyi","SessId":"1","Device":"pc_browser","Compress":0},"Data":{"LoginToken":"","CaptchaCheckName":"","UserName":"suiyi","CaptchaCode":"1"}}
+      //   window.onRequest.gameGate(postData, function(res) {
+      //     // console.log(res)
+      //     window.USER_INFO = res.Data.User;
+      //     onRequest.
+      //   })
+      // }
+
+      function initGame() {
+        // login();
+      }
+    </script>
+  </body>
+</html>
