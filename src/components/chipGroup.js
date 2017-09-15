@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
-export default class Bottom extends Component {
+export default class ChipGroup extends Component {
   constructor(props) {
     super(props);
   }
@@ -12,18 +12,18 @@ export default class Bottom extends Component {
   }
 
   render() {
-    var {dataCountAmount,dataUserBalance} = this.props;
+    var {dataCountAmount, dataUserBalance, activeChip, chipArr, onChangeChip} = this.props;
 		return (
       <footer id="bottom">
         <span className='chip-group'>
-          <i className='chip chip-1 chip-seleced' data-money='1.00'></i>
-          <i className='chip chip-2' data-money='2.00'></i>
-          <i className='chip chip-5' data-money='5.00'></i>
-          <i className='chip chip-10'data-money='10.00'></i>
-          <i className='chip chip-20' data-money='20.00'></i>
-          <i className='chip chip-50' data-money='50.00'></i>
-          <i className='chip chip-100' data-money='100.00'></i>
-          <i className='chip chip-500' data-money='500.00'></i>
+          {
+            chipArr.map((chipVal, idx) => {
+              const isActive = activeChip == chipVal; //判断是否为激活状态
+              return (
+                <i  key={idx} className={`chip chip-${chipVal}` + (isActive ? ' chip-seleced' : '')} data-money={chipVal} onClick={e => onChangeChip(chipVal)}></i>
+              )
+            })
+          }
         </span>
 
         <div className="dice-balance">
@@ -46,4 +46,10 @@ export default class Bottom extends Component {
       </footer>
 		)
 	}
+}
+
+ChipGroup.propTypes = {
+  chipArr: PropTypes.array.isRequired,
+  activeChip: PropTypes.number.isRequired,
+  onChangeChip: PropTypes.func.isRequired,
 }
