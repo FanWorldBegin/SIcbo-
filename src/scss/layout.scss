@@ -170,10 +170,18 @@ body {
             transition: 0.5s;
             opacity: 0.8;
             font-size: 12px;
-            top:-28px;
+            top:-32px;
             left:38%;
             display: none;
             z-index: 20;
+          }
+          &:hover{
+            .bet-type {
+              visibility: visible;
+            }
+            .tip {
+              display: inline-block;
+            }
           }
           .bet-type {
             position: absolute;
@@ -181,7 +189,7 @@ body {
             // z-index: 1;
             background-color: orange;
             opacity: 0.3;
-            display: none;
+            visibility: hidden;
           }
           .chip-add {
             background-image: url('../img/chips.png');
