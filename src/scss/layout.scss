@@ -177,7 +177,7 @@ body {
           }
           &:hover{
             .bet-type {
-              visibility: visible;
+              visibility: visible !important ;
             }
             .tip {
               display: inline-block;

@@ -21,7 +21,7 @@ var chipArr=new Array(Data.length); // 创建一个空数组，长度为投注�
 for (var x=0;x < chipArr.length ;x++ ) {  //存放每个投注类型中的筹码数
   chipArr[x]=new Array();
 }
-var bet = true;
+var open = true;
 var chipRecordArr= new Array();           // 数据数组记录每次投注信息
 export default class GameLogic extends Component {
   constructor(props) {
@@ -65,14 +65,14 @@ export default class GameLogic extends Component {
  * @return {[type]}       [description]
  */
   bet(e) {
-  if(bet) {
+  if(open) {
     var self = this;      //GameLogic
   //  console.log(e);
     var $chipSelect = $('.chip-seleced');      //选中的筹码
     var $betContainer = $(e.target.parentNode);              //当前对象
     var classC = $betContainer.attr('class').toString();
-    console.log(classC.match('bet-container'));
-    if (classC.match('bet-container') != null) {
+    console.log(e.target);
+    if (e.target && (e.target.matches('.bet-type') || e.target.matches('.chip-add'))) {
       var $chipSelect = $('.chip-seleced');      //选中的筹码
       var chipMoney=$chipSelect.attr('data-money');            //获取当前选中筹码的金额
       var chipW=$chipSelect.width();
@@ -161,7 +161,7 @@ export default class GameLogic extends Component {
       }
 
     }else {
-      console.log('cuowu');
+      console.log('请点击有效投位置！');
     }
   }
 
@@ -378,15 +378,15 @@ export default class GameLogic extends Component {
             var winIndex =self.prizeWinning(resArr);
             //中奖索引变亮
             var $betType = $('.dice-sheet');
-            // for(var i=0; i< winIndex.length; i++) {
-            //   $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
-            // }
+            for(var i=0; i< winIndex.length; i++) {
+              $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
+            }
 
             self.saveHistory(resArr,winIndex);
             setTimeout(function(){
-            //   for(var i=0; i< winIndex.length; i++) {
-            //     $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
-            //   }
+              for(var i=0; i< winIndex.length; i++) {
+                $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
+              }
             //  重置桌面计算奖金
               self.settleAccount(winIndex);
               $diceSheet.css('pointer-events','auto');
