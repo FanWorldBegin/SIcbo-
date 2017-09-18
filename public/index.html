@@ -77,24 +77,55 @@
       window.DefaultLaunchGameCode = 'CQSSC';
 
       window.NoDispatchSystemAnnouncements = true;
+
+      window.AUTO_LOGIN_TOKEN_TIMEOUT = 24 * 60 * 60;
       // window.OnReceiveNewRecord
     </script>
     <script>
       // function()
-      window.LoadScript('js/platform.config.js');
-      window.LoadScript('static/js/navigation.bundle.js');
-      window.LoadScript('static/js/basicHelper.js');
-      // function login() {
-      //   var postData = {"Header":{"Method":"trial_login","Platform":"v6","UserName":"suiyi","SessId":"1","Device":"pc_browser","Compress":0},"Data":{"LoginToken":"","CaptchaCheckName":"","UserName":"suiyi","CaptchaCode":"1"}}
-      //   window.onRequest.gameGate(postData, function(res) {
-      //     // console.log(res)
-      //     window.USER_INFO = res.Data.User;
-      //     onRequest.
-      //   })
-      // }
+      window.LoadScript('js/platform.config.js', function() {
+        console.log(window.GAMEPLAY_CONFIGS)
+        G_O_EventEmitter.emit('RESOURCE_READY');
+      });
+      window.LoadScript('js/client.mapper.js', function(res) {
+        window.NAMES_MAPPER = KEY_MAPPERS;
+        initGame();
+      });
+      // window.LoadScript('static/js/navigation.bundle.js', function() {});
+      // window.LoadScript('static/js/basicHelper.js');
+      function login() {
+        var postData = {"Header":{"Method":"trial_login","Platform":"v6","UserName":"suiyi","SessId":"1","Device":"pc_browser","Compress":0},"Data":{"LoginToken":"","CaptchaCheckName":"","UserName":"suiyi","CaptchaCode":"1"}}
+        window.onRequest.gameGate(postData, function(res) {
+          window.USER_INFO = res.Data.User;//用户信息
+          var username = res.Data.User.UserName;
+          var sessId = res.Data.SessId;
+
+
+          var commonHeader = getCommonHeader(username, sessId);
+
+          function getCommonHeader(username, ses) {
+            let reqHeader = {
+              Method: "",
+              SessId: ses || '1',
+              UserName: username || '',
+              Platform: PLATFORM,
+              Device: DEVICE,
+              Compress: 0
+            };
+
+            window.COMMON_REQ_HEADER = reqHeader;
+
+            return reqHeader;
+          }
+          window.onRequest.setPostHeader(commonHeader);
+
+          window.G_O_EventEmitter.emit('LOGIN_SUCCESS');
+          window.OnLoginSuccess();
+        })
+      }
 
       function initGame() {
-        // login();
+        login();
       }
     </script>
   </body>

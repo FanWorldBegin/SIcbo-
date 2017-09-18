@@ -1,10 +1,12 @@
 import React, {Component, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
+
 import App from './app.js'
 
 import './style.scss';
 import './mobile.scss';
 import './scss/layout.scss';
+
 
 // class App extends Component {
 //   render() {

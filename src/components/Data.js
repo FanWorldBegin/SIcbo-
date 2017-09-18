@@ -1,8 +1,8 @@
 var Data = [
-  {property: {index:0, name:'large', odds:1, bs:"大"}, style: { width:126, height:69, left:21, top:29}}, //大
-  {property: {index:1, name:'small', odds:1, bs:"小"}, style: {width:126, height:69, left:964, top:29}}, //小
-  {property: {index:2, name:'odd', odds:1, bs:"单"}, style: {width:126, height:69, left:21, top:100 }}, //单
-  {property: {index:3, name:'even', odds:1, bs:"双"}, style: {width:126, height:69, left:964, top:100}}, //双
+  {property: {index:0, name:'large', odds:1, bs:"大",}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'0', PlayType:"K3_HZDXDS", range:[0,3]}, style: { width:126, height:69, left:21, top:29}}, //大
+  {property: {index:1, name:'small', odds:1, bs:"小"}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'1', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:964, top:29}}, //小
+  {property: {index:2, name:'odd', odds:1, bs:"单"},  orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'2', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:21, top:100 }}, //单
+  {property: {index:3, name:'even', odds:1, bs:"双"}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'3', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:964, top:100}}, //双
   {property: {index:4, name:'sum4', odds:50,}, style: {width:74, height:82, left:21, top:180}}, //和值
   {property: {index:5, name:'sum5', odds:18,}, style: {width:74, height:82, left:98, top:180}}, //和值
   {property: {index:6, name:'sum6', odds:14,}, style: {width:74, height:82, left:175, top:180}}, //和值

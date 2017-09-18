@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import propTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import Data from './Data.js';
+import Data from './data.js';
 export default class LayoutTop extends Component {
   constructor(props) {
     super(props);
