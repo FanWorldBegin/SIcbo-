@@ -1,5 +1,5 @@
 var Data = [
-  {property: {index:0, name:'large', odds:1, bs:"大",}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'0', PlayType:"K3_HZDXDS", range:[0,3]}, style: { width:126, height:69, left:21, top:29}}, //大
+  {property: {index:0, name:'large', odds:1, bs:"大",}, orders: {locate:0, numberUnit:0, display:'大',rule:'*1',range:[0,3]}, style: { width:126, height:69, left:21, top:29}}, //大
   {property: {index:1, name:'small', odds:1, bs:"小"}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'1', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:964, top:29}}, //小
   {property: {index:2, name:'odd', odds:1, bs:"单"},  orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'2', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:21, top:100 }}, //单
   {property: {index:3, name:'even', odds:1, bs:"双"}, orders: {LottCata:'K3', LottType:"AHK3", OriginalRecord:'3', PlayType:"K3_HZDXDS", range:[0,3]}, style: {width:126, height:69, left:964, top:100}}, //双

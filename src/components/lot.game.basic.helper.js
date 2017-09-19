@@ -58,6 +58,9 @@ export class PickerGameAppClass extends PureComponent {
     const {pickerActions, timerActions, gameplayData} = this.props;
     const {lottery = {}} = gameplayData;
     this.syncTime((lotTimers, resData) => {
+
+      pickerActions.changeIssue(lotTimers.NextIssue, selectedLotType);
+
       pickerActions.queryOpenCode(selectedLotType, (openCodeResult) => {
         let currSellIssue = lotTimers.NextIssue;
         let opendIssue = openCodeResult[0].Issue;
@@ -92,6 +95,7 @@ export class PickerGameAppClass extends PureComponent {
     return allCost;
   }
   onAddTransaction(_numVerificationInfo) {
+    console.log(_numVerificationInfo, 'onAddTransaction');
     const {combinationInfo, pickerActions, orderActions} = this.props;
     const numVerificationInfo = _numVerificationInfo || this.props.numVerificationInfo;
     if(!numVerificationInfo.orderable) return orderActions.changeOrderStatus('NO_PICK');

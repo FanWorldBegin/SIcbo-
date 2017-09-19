@@ -78,6 +78,7 @@ class GameLogicLayout extends PickerGameAppClass {
     this.setState({
       activeChip: chipVal
     });
+    this.props.pickerActions.changeMultiple(chipVal);
   }
 
 /**
@@ -140,9 +141,32 @@ class GameLogicLayout extends PickerGameAppClass {
                self.showMoney($betContainer,chipMoney);
                //取消btn禁用
                $('.ui-button').removeClass('btn-disabled');
+               console.log(Data[index].orders);
                nowTime = new Date();
+               //点击选号，添加选号
+               const {pickerActions, gameplayData} = self.props;
+               gameplayData.gameplayGroups[1].groups[0].actions[1]
+               //玩法选择
+               pickerActions.changeGameplay(
+                 gameplayData.gameplayGroups[1].groups[0].actions[1], //传入acrions
+                 'K2BT_2BT'
+               )
+
+               pickerActions.changeSelectedNumber(
+                 'PICKUP',  //选择的过程，不用管。
+                 [{"locate":Data[index].orders.locate,"numberUnit":Data[index].orders.numberUnit,"display":Data[index].orders.display}],  //传入的值
+                 Data[index].orders.rule,   //玩法规则
+                 {},    //忽略
+                 Data[index].orders.range,  //当前玩法的索引范围【大小单双为一组01234】
+               );
+               setTimeout(() => {
+                 const {selectedNumbers} = self.props;
+                 //添加到购物车
+                 self.onAddTransaction(selectedNumbers.verifyInfo);
+               }, 10);
             }
           }
+
         } else if(e.button == 2) {
           if(new Date() - nowTime > 300) {
              if(chipArr[index].length && chipRecordArr.length) { //如果当前区块內存在筹码，且存在投注记录
@@ -166,6 +190,8 @@ class GameLogicLayout extends PickerGameAppClass {
                for(var i=chipRecordArr.length-1; i>=0; i--) {  //从后往前找到 当前区域中最后一个投注值
                   if(index == chipRecordArr[i].index) {
                     chipRecordArr.splice(i,1);   //当投注区域的index 匹配到 投注记录最新投注的index，则删除这条记录
+                    self.props.pickerActions.removeTxItem(i);   //删除下注信息
+                    console.log(i);
                     break;   //不需要在执行下去(每次撤销只删除一个)
                   }
                 }
@@ -202,25 +228,29 @@ class GameLogicLayout extends PickerGameAppClass {
 
     self.init();
 
-//点击选号，添加选号
-    const {pickerActions} = self.props;
-    pickerActions.changeSelectedNumber(
-      'PICKUP',  //选择的过程，不用管。
-      [{"locate":0,"numberUnit":"2","display":"和"}],  //传入的值
-      '*1',   //玩法规则
-      {},    //忽略
-      [0, 3]  //当前玩法的索引范围【大小单双为一组01234】
-    );
+// //点击选号，添加选号
+//     const {pickerActions} = self.props;
+//     pickerActions.changeSelectedNumber(
+//       'PICKUP',  //选择的过程，不用管。
+//       [{"locate":0,"numberUnit":"0","display":"大"}],  //传入的值
+//       '*1',   //玩法规则
+//       {},    //忽略
+//       [0, 3]  //当前玩法的索引范围【大小单双为一组01234】
+//     );
+//
+//     setTimeout(() => {
+//       //添加到购物车
+//       const {selectedNumbers} = self.props;
+//       self.onAddTransaction(selectedNumbers.verifyInfo);
+//       setTimeout(() => {
+//         self.onEnsureOrder();    //下注
+//
+//       }, 10);
+//     }, 10);
 
-    setTimeout(() => {
-      //添加到购物车
-      const {selectedNumbers} = self.props;
-      self.onAddTransaction(selectedNumbers.verifyInfo);
-      setTimeout(() => {
-        self.onEnsureOrder();    //下注
-
-      }, 10);
-    }, 10);
+    // setTimeout(() => {
+    //   self.props.pickerActions.removeTxItem(0);   //删除下注信息
+    // }, 1000);
 
     // let postData = {
     //   method: 'order',
@@ -380,84 +410,85 @@ class GameLogicLayout extends PickerGameAppClass {
   * @return {[type]} [description]
   */
   lotteryDraw() {
-    var self = this;
-    var off = true;
-    var $diceSheet = $('.dice-sheet');
-    $diceSheet.css('pointer-events','none');
-    var RegExp =/[1-6]/;
-    var resArr=[];  //记录开奖号码
-    var $glass = $('.dice-panel .glass');
-    var {dataCountAmount,dataUserBalance} = this.state;
-    if(chipRecordArr.length) { //存在投注记录
-      var dataCountAmount = parseInt(dataCountAmount);
-      var dataUserBalance = Number(dataUserBalance);
-      var balance = calculate.accSub(dataUserBalance,dataCountAmount);
-      $('.ui-button').addClass('btn-disabled');
-      this.setState({
-        dataUserBalance: balance +'.00',   //修改余额
-      });
-      $glass.find('i').each((index,element) => {
-        $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-        element.style.left = (index*52)+'px';
-        //element.style.top = '80px';
-        $(element).animate({
-          top: Math.max(Math.random()*80,40) +'px',
-          transform:'rotate('+Math.random()*360+'deg)',
-          left: (index*52)+'px',
-        },100,function(){
-          $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-          $(this).animate({
-            top:  Math.max(Math.random()*80,40) +'px',
-            transform:'rotate('+Math.random()*360+'deg)',
-            left: (index*52)+'px',
-          },100,function(){
-            $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-            $(this).animate({
-              top:  Math.max(Math.random()*80,40) +'px',
-              transform:'rotate('+Math.random()*360+'deg)',
-              left: (index*52)+'px',
-            }, 100,function(){
-              $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-              $(this).animate({
-                top:  Math.max(Math.random()*80,40) +'px',
-                transform:'rotate('+Math.random()*360+'deg)',
-                left: (index*52)+'px',
-              },100,function(){
-                $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-                $(this).animate({
-                  top:'80px',
-                  transform:'rotate('+Math.random()*360+'deg)',
-                  left: (index*52)+'px',
-                });
-                resArr.push($(this).attr('class').match(RegExp)[0]);   //将结果存储到resArr中
-              })
-            })
-          })
-        });
-
-      });
-      if(off) {
-        setTimeout(function() {
-            var winIndex =self.prizeWinning(resArr);
-            //中奖索引变亮
-            var $betType = $('.dice-sheet');
-            for(var i=0; i< winIndex.length; i++) {
-              $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
-            }
-
-            self.saveHistory(resArr,winIndex);
-            setTimeout(function(){
-              for(var i=0; i< winIndex.length; i++) {
-                $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
-              }
-            //  重置桌面计算奖金
-              self.settleAccount(winIndex);
-              $diceSheet.css('pointer-events','auto');
-            },2000)
-
-        },1000)
-      };
-    }
+    this.onEnsureOrder();    //下注
+    // var self = this;
+    // var off = true;
+    // var $diceSheet = $('.dice-sheet');
+    // $diceSheet.css('pointer-events','none');
+    // var RegExp =/[1-6]/;
+    // var resArr=[];  //记录开奖号码
+    // var $glass = $('.dice-panel .glass');
+    // var {dataCountAmount,dataUserBalance} = this.state;
+    // if(chipRecordArr.length) { //存在投注记录
+    //   var dataCountAmount = parseInt(dataCountAmount);
+    //   var dataUserBalance = Number(dataUserBalance);
+    //   var balance = calculate.accSub(dataUserBalance,dataCountAmount);
+    //   $('.ui-button').addClass('btn-disabled');
+    //   this.setState({
+    //     dataUserBalance: balance +'.00',   //修改余额
+    //   });
+    //   $glass.find('i').each((index,element) => {
+    //     $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+    //     element.style.left = (index*52)+'px';
+    //     //element.style.top = '80px';
+    //     $(element).animate({
+    //       top: Math.max(Math.random()*80,40) +'px',
+    //       transform:'rotate('+Math.random()*360+'deg)',
+    //       left: (index*52)+'px',
+    //     },100,function(){
+    //       $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+    //       $(this).animate({
+    //         top:  Math.max(Math.random()*80,40) +'px',
+    //         transform:'rotate('+Math.random()*360+'deg)',
+    //         left: (index*52)+'px',
+    //       },100,function(){
+    //         $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+    //         $(this).animate({
+    //           top:  Math.max(Math.random()*80,40) +'px',
+    //           transform:'rotate('+Math.random()*360+'deg)',
+    //           left: (index*52)+'px',
+    //         }, 100,function(){
+    //           $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+    //           $(this).animate({
+    //             top:  Math.max(Math.random()*80,40) +'px',
+    //             transform:'rotate('+Math.random()*360+'deg)',
+    //             left: (index*52)+'px',
+    //           },100,function(){
+    //             $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+    //             $(this).animate({
+    //               top:'80px',
+    //               transform:'rotate('+Math.random()*360+'deg)',
+    //               left: (index*52)+'px',
+    //             });
+    //             resArr.push($(this).attr('class').match(RegExp)[0]);   //将结果存储到resArr中
+    //           })
+    //         })
+    //       })
+    //     });
+    //
+    //   });
+    //   if(off) {
+    //     setTimeout(function() {
+    //         var winIndex =self.prizeWinning(resArr);
+    //         //中奖索引变亮
+    //         var $betType = $('.dice-sheet');
+    //         for(var i=0; i< winIndex.length; i++) {
+    //           $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
+    //         }
+    //
+    //         self.saveHistory(resArr,winIndex);
+    //         setTimeout(function(){
+    //           for(var i=0; i< winIndex.length; i++) {
+    //             $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
+    //           }
+    //         //  重置桌面计算奖金
+    //           self.settleAccount(winIndex);
+    //           $diceSheet.css('pointer-events','auto');
+    //         },2000)
+    //
+    //     },1000)
+    //   };
+    // }
   }
 
 

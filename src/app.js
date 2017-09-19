@@ -17,7 +17,7 @@ export default class App extends Component {
 		const self = this;
 
 		G_O_EventEmitter.subscript('RESOURCE_READY', (res) => {
-			const gameplayData = G_F_WrapGameNavConfig('JSK3');
+			const gameplayData = G_F_WrapGameNavConfig('AHK3');
 			self.setState({
 				gameplayData: gameplayData.props.gameplayData
 			});
@@ -29,7 +29,7 @@ export default class App extends Component {
 		const {gameplayData} = this.state;
 		return (
 			<LoginSelector>
-				<LotGameRedux gameplayData={gameplayData} sectionId={'JSK3'}/>
+				<LotGameRedux gameplayData={gameplayData} sectionId={'AHK3'}/>
 			</LoginSelector>
 		)
 	}
