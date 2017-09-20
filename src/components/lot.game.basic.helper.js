@@ -95,7 +95,7 @@ export class PickerGameAppClass extends PureComponent {
     return allCost;
   }
   onAddTransaction(_numVerificationInfo) {
-    console.log(_numVerificationInfo, 'onAddTransaction');
+  //  console.log(_numVerificationInfo, 'onAddTransaction');
     const {combinationInfo, pickerActions, orderActions} = this.props;
     const numVerificationInfo = _numVerificationInfo || this.props.numVerificationInfo;
     if(!numVerificationInfo.orderable) return orderActions.changeOrderStatus('NO_PICK');

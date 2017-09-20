@@ -21,7 +21,22 @@ export default class ChipTable extends Component {
       <div className="dice-sheet">
       {
         Data.map((value, index) =>{
-          if(value.style){
+          if(value.style && value.property.hint){
+            var typename = value.orders.playType;
+            return (
+              <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet( e)}}>
+                <span className="hint">?
+                  <div className="hint-box">{
+                      window.GAMEPLAY_CONFIGS.LottPlayData[typename].Description}</div>
+                </span>
+
+                 <span className="tip hove-show">
+                   <span className="text">0.00</span>
+                   </span>
+                   <div className={` bet-type dice-sheet-${index}`} style={style} name={value.property.name} key={index}></div>
+               </div>
+            )
+          } else if (value.style && !value.property.hint){
             return (
               <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet( e)}}>
                  <span className="tip hove-show">

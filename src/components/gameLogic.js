@@ -55,6 +55,7 @@ class GameLogicLayout extends PickerGameAppClass {
     this.createChip = this.createChip.bind(this);
     this.saveHistory = this.saveHistory.bind(this);
     this.sortWInIndex = this.sortWInIndex.bind(this);
+    this.confirmBets = this.confirmBets.bind(this);
     this.state = {
       dataCountAmount: '0.00',
       dataUserBalance: '1000.00',
@@ -78,7 +79,7 @@ class GameLogicLayout extends PickerGameAppClass {
     this.setState({
       activeChip: chipVal
     });
-    this.props.pickerActions.changeMultiple(chipVal);
+    this.props.pickerActions.changeMultiple(chipVal);  //设置投注倍数
   }
 
 /**
@@ -136,33 +137,54 @@ class GameLogicLayout extends PickerGameAppClass {
                   'bitTypeSelf': $betContainer,       //指针指向当前选中的投注块
                }
                chipArr[index].length++; //当前选中类型中的筹码数加1
-               chipRecordArr.push(json);
-               console.log(chipRecordArr);
+               chipRecordArr.unshift(json);  //从头部插入
+               //console.log(chipRecordArr);
                self.showMoney($betContainer,chipMoney);
                //取消btn禁用
                $('.ui-button').removeClass('btn-disabled');
-               console.log(Data[index].orders);
+               console.log(chipRecordArr);
                nowTime = new Date();
                //点击选号，添加选号
                const {pickerActions, gameplayData} = self.props;
-               gameplayData.gameplayGroups[1].groups[0].actions[1]
-               //玩法选择
-               pickerActions.changeGameplay(
-                 gameplayData.gameplayGroups[1].groups[0].actions[1], //传入acrions
-                 'K2BT_2BT'
-               )
+               var orders = Data[index].orders;
+               var playTypeDetails = gameplayData.gameplayGroups[orders.gameplayGroup].groups[orders.group].actions[orders.actionc];
+               var playType = gameplayData.gameplayGroups[orders.gameplayGroup].code + '_' +  playTypeDetails.code;
+               //console.log(playTypeDetails);
+               //玩法选择 (改变玩法)
+              pickerActions.changeLocator(gameplayData.gameplayGroups[orders.gameplayGroup], gameplayData.defaultGameplay); //先换group
+            console.log(playType);
+              setTimeout(() => {
+                 pickerActions.changeGameplay( //玩法选择 (改变玩法)
+                   gameplayData.gameplayGroups[orders.gameplayGroup].groups[orders.group].actions[orders.actionc],
+                   playType
+                 )
+              }, 1);
 
-               pickerActions.changeSelectedNumber(
-                 'PICKUP',  //选择的过程，不用管。
-                 [{"locate":Data[index].orders.locate,"numberUnit":Data[index].orders.numberUnit,"display":Data[index].orders.display}],  //传入的值
-                 Data[index].orders.rule,   //玩法规则
-                 {},    //忽略
-                 Data[index].orders.range,  //当前玩法的索引范围【大小单双为一组01234】
-               );
                setTimeout(() => {
-                 const {selectedNumbers} = self.props;
-                 //添加到购物车
-                 self.onAddTransaction(selectedNumbers.verifyInfo);
+                 if(orders.type == 'PICKUP' ) {
+                   pickerActions.changeSelectedNumber(
+                     'PICKUP',  //选择的过程，不用管。
+                     [{"locate":orders.locate, "numberUnit":orders.numberUnit, "display":orders.display}],  //传入的值
+                     playTypeDetails.rule,   //玩法规则
+                     {},    //忽略
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01234】
+                   );
+                 } else if (orders.type == 'INPUT') {
+                   // Input单式
+                   pickerActions.changeSelectedNumber(
+                     'INPUT',  //选择的过程，不用管。
+                     [orders.numberUnit],  //传入的值
+                     playTypeDetails.rule,   //玩法规则
+                     {},    //忽略
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01234】
+                   );
+                 }
+
+                 setTimeout(() => {
+                   const {selectedNumbers} = self.props;
+                   //添加到购物车
+                   self.onAddTransaction(selectedNumbers.verifyInfo);
+                 }, 10);
                }, 10);
             }
           }
@@ -187,11 +209,12 @@ class GameLogicLayout extends PickerGameAppClass {
                 });
                 //判断当前选区存在筹码，筹码个数减1，
                chipArr[index].length > 0? chipArr[index].length-- :chipArr[index].length=0;
-               for(var i=chipRecordArr.length-1; i>=0; i--) {  //从后往前找到 当前区域中最后一个投注值
+
+               for(var i=0; i<chipRecordArr.length; i++) {  //从前往后找 当前区域中最后一个投注值
                   if(index == chipRecordArr[i].index) {
                     chipRecordArr.splice(i,1);   //当投注区域的index 匹配到 投注记录最新投注的index，则删除这条记录
                     self.props.pickerActions.removeTxItem(i);   //删除下注信息
-                    console.log(i);
+                    console.log(chipRecordArr);
                     break;   //不需要在执行下去(每次撤销只删除一个)
                   }
                 }
@@ -214,17 +237,23 @@ class GameLogicLayout extends PickerGameAppClass {
 
   componentDidMount() {
     //取消右键菜单
-    // $('body').bind("contextmenu", function(e) {
-    //   return false;
-    // });
+    $('body').bind("contextmenu", function(e) {
+      return false;
+    });
     const self = this;
 
     this.buttonClick();
 
     // TODO 以后需要改造
-    // G_O_EventEmitter.subscript('LOGIN_SUCCESS', () => {
-    //   // pickerActions.
-    // });
+    G_O_EventEmitter.subscript('LOGIN_SUCCESS', () => {
+      // pickerActions.
+      // const {gameplayData, pickerActions} = self.props;
+      //
+      // pickerActions.changeGameplay(
+      //   gameplayData.gameplayGroups[4].groups[0].actions[1],
+      //   'K3_HZDXDS'
+      // )
+    });
 
     self.init();
 
@@ -322,7 +351,7 @@ class GameLogicLayout extends PickerGameAppClass {
         var index = $(this).index();
         switch(index) {
           case 0:
-          self.lotteryDraw(); break;
+          self.confirmBets(); break;
           case 1:
           self.repealChip(); break;
           case 2:
@@ -348,13 +377,13 @@ class GameLogicLayout extends PickerGameAppClass {
     });
     //撤销动画
     for(let i=0; i<chipRecordArr.length; i++){
-      this.animationTip(chipRecordArr[i])
+      this.animationTip(chipRecordArr[i]);
     }
     //清空各个区块筹码个数
     for(let i = 0; i < chipArr.length; i++){
       chipArr[i].length = 0;
     }
-    //清空投注记录
+    this.props.pickerActions.removeAllTxItem();   //删除下注信息
     chipRecordArr.length = 0;
   }
 
@@ -393,7 +422,8 @@ class GameLogicLayout extends PickerGameAppClass {
   repealChip() {
     if(new Date() - nowTime > 500) {
       if(chipRecordArr.length){
-        var lastChip = chipRecordArr.pop();
+        this.props.pickerActions.removeTxItem(0);   //删除下注信息
+        var lastChip = chipRecordArr.shift();
         lastChip.bitTypeSelf.find('i').eq(chipArr[lastChip.index].length - 1).remove(); //删除区块中最后一个筹码
         chipArr[lastChip.index].length ? chipArr[lastChip.index].length -- : chipArr[lastChip.index].length = 0;
         this.animationTip(lastChip);
@@ -410,88 +440,96 @@ class GameLogicLayout extends PickerGameAppClass {
   * @return {[type]} [description]
   */
   lotteryDraw() {
-    this.onEnsureOrder();    //下注
-    // var self = this;
-    // var off = true;
-    // var $diceSheet = $('.dice-sheet');
-    // $diceSheet.css('pointer-events','none');
-    // var RegExp =/[1-6]/;
-    // var resArr=[];  //记录开奖号码
-    // var $glass = $('.dice-panel .glass');
-    // var {dataCountAmount,dataUserBalance} = this.state;
-    // if(chipRecordArr.length) { //存在投注记录
-    //   var dataCountAmount = parseInt(dataCountAmount);
-    //   var dataUserBalance = Number(dataUserBalance);
-    //   var balance = calculate.accSub(dataUserBalance,dataCountAmount);
-    //   $('.ui-button').addClass('btn-disabled');
-    //   this.setState({
-    //     dataUserBalance: balance +'.00',   //修改余额
-    //   });
-    //   $glass.find('i').each((index,element) => {
-    //     $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-    //     element.style.left = (index*52)+'px';
-    //     //element.style.top = '80px';
-    //     $(element).animate({
-    //       top: Math.max(Math.random()*80,40) +'px',
-    //       transform:'rotate('+Math.random()*360+'deg)',
-    //       left: (index*52)+'px',
-    //     },100,function(){
-    //       $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-    //       $(this).animate({
-    //         top:  Math.max(Math.random()*80,40) +'px',
-    //         transform:'rotate('+Math.random()*360+'deg)',
-    //         left: (index*52)+'px',
-    //       },100,function(){
-    //         $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-    //         $(this).animate({
-    //           top:  Math.max(Math.random()*80,40) +'px',
-    //           transform:'rotate('+Math.random()*360+'deg)',
-    //           left: (index*52)+'px',
-    //         }, 100,function(){
-    //           $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-    //           $(this).animate({
-    //             top:  Math.max(Math.random()*80,40) +'px',
-    //             transform:'rotate('+Math.random()*360+'deg)',
-    //             left: (index*52)+'px',
-    //           },100,function(){
-    //             $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
-    //             $(this).animate({
-    //               top:'80px',
-    //               transform:'rotate('+Math.random()*360+'deg)',
-    //               left: (index*52)+'px',
-    //             });
-    //             resArr.push($(this).attr('class').match(RegExp)[0]);   //将结果存储到resArr中
-    //           })
-    //         })
-    //       })
-    //     });
-    //
-    //   });
-    //   if(off) {
-    //     setTimeout(function() {
-    //         var winIndex =self.prizeWinning(resArr);
-    //         //中奖索引变亮
-    //         var $betType = $('.dice-sheet');
-    //         for(var i=0; i< winIndex.length; i++) {
-    //           $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
-    //         }
-    //
-    //         self.saveHistory(resArr,winIndex);
-    //         setTimeout(function(){
-    //           for(var i=0; i< winIndex.length; i++) {
-    //             $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
-    //           }
-    //         //  重置桌面计算奖金
-    //           self.settleAccount(winIndex);
-    //           $diceSheet.css('pointer-events','auto');
-    //         },2000)
-    //
-    //     },1000)
-    //   };
-    // }
+    var self = this;
+    var off = true;
+    var $diceSheet = $('.dice-sheet');
+    $diceSheet.css('pointer-events','none');
+    var RegExp =/[1-6]/;
+    var resArr=[];  //记录开奖号码
+    var $glass = $('.dice-panel .glass');
+    var {dataCountAmount,dataUserBalance} = this.state;
+    if(chipRecordArr.length) { //存在投注记录
+      var dataCountAmount = parseInt(dataCountAmount);
+      var dataUserBalance = Number(dataUserBalance);
+      var balance = calculate.accSub(dataUserBalance,dataCountAmount);
+      $('.ui-button').addClass('btn-disabled');
+      this.setState({
+        dataUserBalance: balance +'.00',   //修改余额
+      });
+      $glass.find('i').each((index,element) => {
+        $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+        element.style.left = (index*52)+'px';
+        //element.style.top = '80px';
+        $(element).animate({
+          top: Math.max(Math.random()*80,40) +'px',
+          transform:'rotate('+Math.random()*360+'deg)',
+          left: (index*52)+'px',
+        },100,function(){
+          $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+          $(this).animate({
+            top:  Math.max(Math.random()*80,40) +'px',
+            transform:'rotate('+Math.random()*360+'deg)',
+            left: (index*52)+'px',
+          },100,function(){
+            $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+            $(this).animate({
+              top:  Math.max(Math.random()*80,40) +'px',
+              transform:'rotate('+Math.random()*360+'deg)',
+              left: (index*52)+'px',
+            }, 100,function(){
+              $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+              $(this).animate({
+                top:  Math.max(Math.random()*80,40) +'px',
+                transform:'rotate('+Math.random()*360+'deg)',
+                left: (index*52)+'px',
+              },100,function(){
+                $(this).attr('class','dice dice-' + Math.ceil(Math.random()*6));
+                $(this).animate({
+                  top:'80px',
+                  transform:'rotate('+Math.random()*360+'deg)',
+                  left: (index*52)+'px',
+                });
+                resArr.push($(this).attr('class').match(RegExp)[0]);   //将结果存储到resArr中
+              })
+            })
+          })
+        });
+
+      });
+      if(off) {
+        setTimeout(function() {
+            var winIndex =self.prizeWinning(resArr);
+            //中奖索引变亮
+            var $betType = $('.dice-sheet');
+            for(var i=0; i< winIndex.length; i++) {
+              $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
+            }
+
+            self.saveHistory(resArr,winIndex);
+            setTimeout(function(){
+              for(var i=0; i< winIndex.length; i++) {
+                $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
+              }
+            //  重置桌面计算奖金
+              self.settleAccount(winIndex);
+              $diceSheet.css('pointer-events','auto');
+            },2000)
+
+        },1000)
+      };
+    }
   }
 
-
+/**
+ * [confirmBets 确认投注]
+ * @return {[type]} [description]
+ */
+  confirmBets(){
+    if(chipRecordArr.length) { //存在投注记录
+    this.onEnsureOrder();    //下注
+    this.lotteryDraw();
+    }
+  }
 /**
  * [saveHistory 将开奖号码，中奖索引保存]
  * @param  {[type]} resArr   [开奖号码]
