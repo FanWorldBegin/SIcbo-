@@ -45,23 +45,23 @@ var Data = [
   {property: {index:43, name:'pair45', odds:5}, orders: {locate:0, numberUnit:'45', display:'二不同号', gameplayGroup:0 ,group:0, actionc:1, type:'INPUT'}, style: {width:70, height:105, left:880, top:273}}, //二不同号
   {property: {index:44, name:'pair46', odds:5}, orders: {locate:0, numberUnit:'46', display:'二不同号', gameplayGroup:0 ,group:0, actionc:1, type:'INPUT'}, style: {width:70, height:105, left:951, top:273}}, //二不同号
   {property: {index:45, name:'pair56', odds:5}, orders: {locate:0, numberUnit:'56', display:'二不同号', gameplayGroup:0 ,group:0, actionc:1, type:'INPUT'}, style: {width:70, height:105, left:1023, top:273}}, //二不同号
-  {property: {index:46, name:'one1',odds:1},    style: {width:177, height:56, left:21, top:390}}, //一颗骰子
-  {property: {index:47, name:'one2',odds:1}, style: {width:177, height:56, left:200, top:390}}, //一颗骰子
-  {property: {index:48, name:'one3',odds:1}, style: {width:177, height:56, left:379, top:390}}, //一颗骰子
-  {property: {index:49, name:'one4',odds:1}, style: {width:177, height:56, left:558, top:390}}, //一颗骰子
-  {property: {index:50, name:'one5',odds:1}, style: {width:177, height:56, left:737, top:390}}, //一颗骰子
-  {property: {index:51, name:'one6',odds:1}, style: {width:177, height:56, left:916, top:390}}, //一颗骰子
-  {property: {index:52, name:'one11',odds:2},}, //一颗骰子
-  {property: {index:53, name:'one22',odds:2}, }, //一颗骰子
-  {property: {index:54, name:'one33',odds:2},}, //一颗骰子
-  {property: {index:55, name:'one44',odds:2}, }, //一颗骰子
-  {property: {index:56, name:'one55',odds:2}, }, //一颗骰子
-  {property: {index:57, name:'one66',odds:2}, }, //一颗骰子
-  {property: {index:58, name:'one111',odds:3}, }, //一颗骰子
-  {property: {index:59, name:'one222',odds:3}, }, //一颗骰子
-  {property: {index:60, name:'one333',odds:3},}, //一颗骰子
-  {property: {index:61, name:'one444',odds:3},}, //一颗骰子
-  {property: {index:62, name:'one555',odds:3}, }, //一颗骰子
-  {property: {index:63, name:'one666',odds:3},}, //一颗骰子
+  // {property: {index:46, name:'one1',odds:1},    style: {width:177, height:56, left:21, top:390}}, //一颗骰子
+  // {property: {index:47, name:'one2',odds:1}, style: {width:177, height:56, left:200, top:390}}, //一颗骰子
+  // {property: {index:48, name:'one3',odds:1}, style: {width:177, height:56, left:379, top:390}}, //一颗骰子
+  // {property: {index:49, name:'one4',odds:1}, style: {width:177, height:56, left:558, top:390}}, //一颗骰子
+  // {property: {index:50, name:'one5',odds:1}, style: {width:177, height:56, left:737, top:390}}, //一颗骰子
+  // {property: {index:51, name:'one6',odds:1}, style: {width:177, height:56, left:916, top:390}}, //一颗骰子
+  // {property: {index:52, name:'one11',odds:2},}, //一颗骰子
+  // {property: {index:53, name:'one22',odds:2}, }, //一颗骰子
+  // {property: {index:54, name:'one33',odds:2},}, //一颗骰子
+  // {property: {index:55, name:'one44',odds:2}, }, //一颗骰子
+  // {property: {index:56, name:'one55',odds:2}, }, //一颗骰子
+  // {property: {index:57, name:'one66',odds:2}, }, //一颗骰子
+  // {property: {index:58, name:'one111',odds:3}, }, //一颗骰子
+  // {property: {index:59, name:'one222',odds:3}, }, //一颗骰子
+  // {property: {index:60, name:'one333',odds:3},}, //一颗骰子
+  // {property: {index:61, name:'one444',odds:3},}, //一颗骰子
+  // {property: {index:62, name:'one555',odds:3}, }, //一颗骰子
+  // {property: {index:63, name:'one666',odds:3},}, //一颗骰子
 ]
  export default Data;

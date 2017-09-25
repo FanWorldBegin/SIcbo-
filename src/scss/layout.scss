@@ -25,6 +25,7 @@ body {
         top:49px;
         width: 150px;
         height:140px;
+        //骰子
         .dice {
           width: 50px;
           height: 50px;
@@ -49,12 +50,26 @@ body {
         }
         .dice-4 {
           background-position: 0px -50px;
+          top: 80px;
         }
         .dice-5 {
           background-position: -50px -50px;
+          top: 80px;
         }
         .dice-6 {
           background-position: -100px -50px;
+          top: 80px;
+        }
+        .dice-animation {
+          top:100px;
+          animation: 0.2s diceAnimation;
+          animation-iteration-count: 3;
+        }
+        @keyframes diceAnimation {
+          0% { top: 65px; transform:rotate(30deg);}
+          25% { top: 60px; transform:rotate(90deg); }
+          50% { top: 55px; transform:rotate(180deg);}
+          100% { top: 50px;transform:rotate(360deg);}
         }
       }
       .lottery-record {
@@ -183,7 +198,7 @@ body {
               position: absolute;
               visibility: hidden;
               z-index: 40;
-              left:10px;
+              left:16px;
               top:2px;
               background:rgba(35, 34, 35, 0.9);
               padding: 6px;
@@ -246,7 +261,7 @@ body {
     }
 
   .layout-bottom {
-    width:100%;
+    width:1000px;
     position:fixed;
     bottom:0;
     padding-bottom:10px;
@@ -287,6 +302,9 @@ body {
         .chip-500 {
           background-position: -350px 0px;
         }
+        .chip-1000 {
+          background-position: -400px 0px;
+        }
         i.chip-seleced {
           position: relative;
           top:-10px;
@@ -295,13 +313,12 @@ body {
       }
       //投注金额模块
       .dice-balance {
-        width: 150px;
+        width: 200px;
         margin-left: 20px;
         color: orange;
         display: inline-block;
         padding: 8px;
         padding-left: 20px;
-        padding-right: 20px;
         border-left: 1px solid #838491;
         border-right: 1px solid #838491;
         label {

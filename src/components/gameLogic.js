@@ -27,7 +27,7 @@ var chipArr=new Array(Data.length); // 创建一个空数组，长度为投注�
 for (var x=0;x < chipArr.length ;x++ ) {  //存放每个投注类型中的筹码数
   chipArr[x]=new Array();
 }
-var open = true;
+var open = true;                          //是否可下注模式
 var chipRecordArr= new Array();           // 数据数组记录每次投注信息
 var clientOrders = {
   AwardGroupCode: "AWARD1800",
@@ -63,7 +63,7 @@ class GameLogicLayout extends PickerGameAppClass {
       activeChip: 1,
     };
     this.ChipArr = [
-      1, 2, 5, 10, 20, 50, 100, 500
+      1, 2, 5, 10, 20, 50, 100, 500, 1000
     ];
 
     this.selectedLotType = props.gameplayData.code;
@@ -75,7 +75,7 @@ class GameLogicLayout extends PickerGameAppClass {
    * @param  {[type]} chipVal [获取当前点击元素]
    * @return {[type]}         [description]
    */
-  changeChip(chipVal) {
+  changeChip(chipVal) {    //作为参数传入
     this.setState({
       activeChip: chipVal
     });
@@ -256,30 +256,6 @@ class GameLogicLayout extends PickerGameAppClass {
     });
 
     self.init();
-
-// //点击选号，添加选号
-//     const {pickerActions} = self.props;
-//     pickerActions.changeSelectedNumber(
-//       'PICKUP',  //选择的过程，不用管。
-//       [{"locate":0,"numberUnit":"0","display":"大"}],  //传入的值
-//       '*1',   //玩法规则
-//       {},    //忽略
-//       [0, 3]  //当前玩法的索引范围【大小单双为一组01234】
-//     );
-//
-//     setTimeout(() => {
-//       //添加到购物车
-//       const {selectedNumbers} = self.props;
-//       self.onAddTransaction(selectedNumbers.verifyInfo);
-//       setTimeout(() => {
-//         self.onEnsureOrder();    //下注
-//
-//       }, 10);
-//     }, 10);
-
-    // setTimeout(() => {
-    //   self.props.pickerActions.removeTxItem(0);   //删除下注信息
-    // }, 1000);
 
     // let postData = {
     //   method: 'order',
@@ -520,6 +496,66 @@ class GameLogicLayout extends PickerGameAppClass {
     }
   }
 
+  lotteryDrawCss() {
+    self = this;
+    var $glass = $('.dice-panel .glass');
+    var $diceSheet = $('.dice-sheet');
+    $diceSheet.css('pointer-events','none');
+    var RegExp =/[1-6]/;
+    var resArr=[];  //记录开奖号码
+    var arr = [4,5,6]; //开奖号码
+    var {dataCountAmount,dataUserBalance} = this.state;
+    if(chipRecordArr.length) {
+      var dataCountAmount = parseInt(dataCountAmount);
+      var dataUserBalance = Number(dataUserBalance);
+      var balance = calculate.accSub(dataUserBalance,dataCountAmount);
+      $('.ui-button').addClass('btn-disabled');
+      this.setState({
+        dataUserBalance: balance +'.00',   //修改余额
+      });
+      $glass.find('i').each((index, element) => {
+        $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
+        element.style.left = (index*52)+'px';
+        setTimeout(function(){
+          $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
+          setTimeout(function(){
+            $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
+          },200)
+          setTimeout(function(){
+            $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
+          },200)
+          setTimeout(function(){
+            $(element).attr('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
+            element.style.top = 80+'px';
+          },200);
+          setTimeout(function(){
+            $(element).attr('class','dice dice-' + arr[index]);
+            resArr.push($(element).attr('class').match(RegExp)[0]);   //将结果存储到resArr中
+          },300)
+        },200)
+      })
+
+      setTimeout(function() {
+          var winIndex =self.prizeWinning(resArr);
+          //中奖索引变亮
+          var $betType = $('.dice-sheet');
+          for(var i=0; i< winIndex.length; i++) {
+            $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"visible");
+          }
+
+          self.saveHistory(resArr,winIndex);
+          setTimeout(function(){
+            for(var i=0; i< winIndex.length; i++) {
+              $betType.find('.dice-sheet-' + winIndex[i]).css('visibility',"hidden");
+            }
+          //  重置桌面计算奖金
+            self.settleAccount(winIndex);
+            $diceSheet.css('pointer-events','auto');
+          },2000)
+
+      },1000)
+    }
+  }
 /**
  * [confirmBets 确认投注]
  * @return {[type]} [description]
@@ -527,7 +563,7 @@ class GameLogicLayout extends PickerGameAppClass {
   confirmBets(){
     if(chipRecordArr.length) { //存在投注记录
     this.onEnsureOrder();    //下注
-    this.lotteryDraw();
+    this.lotteryDrawCss();
     }
   }
 /**
@@ -713,7 +749,7 @@ class GameLogicLayout extends PickerGameAppClass {
 		return (
       <div className="container-main">
         <div className="dice-top">
-          <DicePanel history={history}/>
+          <DicePanel history={history} />
         </div>
         <div className="dice-table">
           <ChipTable onBet={val => this.bet(val)}/>

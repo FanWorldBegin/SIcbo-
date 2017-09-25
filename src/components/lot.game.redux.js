@@ -15,12 +15,12 @@ export default class LotGameApp extends Component {
   render() {
     const {
       onAppResponse,
-      gameplayData, sectionId
+      gameplayData,
+      sectionId
     } = this.props;
 
     // const {collections} = PickerStores;
-    const store = (PickerStores.GetAllPickerStores())[sectionId];
-
+    const store = (PickerStores.GetAllPickerStores())[sectionId]; //获取对应store
     return (
       <Provider store={store}>
         <GameLogic
@@ -36,3 +36,6 @@ LotGameApp.propTypes = {
   sectionId: PropTypes.string,
   onAppResponse: PropTypes.func
 }
+//在app.js中引用
+//<Provider store> 使组件层级中的 connect() 方法都能够获得 Redux store。
+//正常情况下，你的根组件应该嵌套在 <Provider> 中才能使用 connect() 方法。

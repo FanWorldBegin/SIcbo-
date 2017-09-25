@@ -13,9 +13,7 @@ export default class App extends Component {
 	};
 	constructor(props) {
 		super(props);
-
 		const self = this;
-
 		G_O_EventEmitter.subscript('RESOURCE_READY', (res) => {
 			const gameplayData = G_F_WrapGameNavConfig('AHK3');
 			self.setState({
