@@ -8,10 +8,8 @@ import ChipTable from "./chipTable.js";
 import DicePanel from './dicePanel.js';
 
 import {PickerGameAppClass} from './lot.game.basic.helper.js';
-
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
 import {PickerActions} from 'matrix-web-game-actions';
 
 const {pickerActions, timerActions, orderActions} = PickerActions;
@@ -61,7 +59,9 @@ class GameLogicLayout extends PickerGameAppClass {
       dataUserBalance: '1000.00',
       history: [],
       activeChip: 1,
+      betInfo:this.props.transactionStatus
     };
+    //筹码面值
     this.ChipArr = [
       1, 2, 5, 10, 20, 50, 100, 500, 1000
     ];
@@ -108,9 +108,11 @@ class GameLogicLayout extends PickerGameAppClass {
           var chipTop = $chipSelect.offset().top;
           var chipBackpo = $chipSelect.css('backgroundPosition'); //当前选中筹码的 backgroundPosition
           var {dataCountAmount,dataUserBalance} = self.state;
-          var nowCountAmount = dataCountAmount*1 + chipMoney*1; //当前投注
+          /*********************当前投注金额，以后待修改***********************************/
+          var nowCountAmount = dataCountAmount*1 + chipMoney*1; //当前投注金额
           if(new Date() - nowTime > 300) {
-            if(nowCountAmount > dataUserBalance*1) {
+          /*********************判断余额是否足够***********************************/
+            if(nowCountAmount >= dataUserBalance*1) {
               alert('余额不足，请充值');
             } else {
               //可以设置最大投注金额
@@ -243,7 +245,7 @@ class GameLogicLayout extends PickerGameAppClass {
     const self = this;
 
     this.buttonClick();
-
+    this.buttonHover();
     // TODO 以后需要改造
     G_O_EventEmitter.subscript('LOGIN_SUCCESS', () => {
       // pickerActions.
@@ -328,13 +330,23 @@ class GameLogicLayout extends PickerGameAppClass {
         switch(index) {
           case 0:
           self.confirmBets(); break;
-          case 1:
+          case 3:
           self.repealChip(); break;
-          case 2:
+          case 4:
           self.empty(); break;
         }
       }
     });
+  }
+
+  buttonHover() {
+    $('.ui-button').hover(function(){
+      if ($('.ui-button').hasClass('btn-disabled')){
+        $('.bet-tip').css('visibility', 'visible');
+      }
+    }, function(){
+        $('.bet-tip').css('visibility', 'hidden');
+    })
   }
   /**
    * [empty 清空筹码]
@@ -551,6 +563,7 @@ class GameLogicLayout extends PickerGameAppClass {
           //  重置桌面计算奖金
             self.settleAccount(winIndex);
             $diceSheet.css('pointer-events','auto');
+              $('.action-buttom .bet-info').css('visibility', 'hidden');
           },2000)
 
       },1000)
@@ -562,8 +575,10 @@ class GameLogicLayout extends PickerGameAppClass {
  */
   confirmBets(){
     if(chipRecordArr.length) { //存在投注记录
-    this.onEnsureOrder();    //下注
-    this.lotteryDrawCss();
+      this.onEnsureOrder();    //下注
+      $('.action-buttom .bet-info').css('visibility', 'visible');
+      //this.lotteryDrawCss();
+      this.lotteryDraw();
     }
   }
 /**
@@ -729,9 +744,24 @@ class GameLogicLayout extends PickerGameAppClass {
     var $diceSheet = $('.dice-sheet');
   }
 
-	render() {
-    var {dataCountAmount,dataUserBalance,history,activeChip} = this.state;
+  betInfo(betInfo){
+    var info;
+    switch(betInfo) {
+      case 'ORDERING':
+      info = "投注中…"; break;
+      case "SUCCESS":
+      info = "投注成功!"; break;
+      case "FAIL":
+      info = "投注失败!"; break;
+      default:
+      info='';
+     }
+     return info;
+  }
 
+	render() {
+    var {dataCountAmount,dataUserBalance,history,activeChip,} = this.state;
+    var betInfo;
     const {
       pickerActions, timerActions, orderActions,
       sectionId, gameplayData,
@@ -741,10 +771,12 @@ class GameLogicLayout extends PickerGameAppClass {
       txHistoryList, transactionStatus,
       selectedIssue,
       LRYLInfo, openCodesInfo,
-      onAppResponse
+      onAppResponse,
     } = this.props;
-
     console.log(this.props);
+    var betInfo = this.props.transactionStatus;
+    betInfo = this.betInfo( betInfo.type );
+    console.log(betInfo);
 
 		return (
       <div className="container-main">
@@ -760,7 +792,9 @@ class GameLogicLayout extends PickerGameAppClass {
            chipArr={this.ChipArr}
            activeChip={activeChip}
            dataCountAmount={dataCountAmount}
-           dataUserBalance={dataUserBalance}/>
+           dataUserBalance={dataUserBalance}
+           betInfo={betInfo}
+           />
         </div>
       </div>
 		)
