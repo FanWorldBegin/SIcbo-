@@ -38,7 +38,7 @@ export default class LayoutTop extends Component {
                            }
                          </div>
                          <div className="rec2">{hlist.winIndex[2]}</div>
-                         <div className="rec3">{Data[hlist.winIndex[0]].property.bs}</div>
+                         <div className="rec3">{Data[hlist.winIndex[0]].property.bs}</div> 
                          <div className="rec4">{Data[hlist.winIndex[1]].property.bs}</div>
                          <div className="rec5">第<span>{hlist.index}</span>期</div>
                        </div>

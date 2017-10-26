@@ -12,7 +12,7 @@ export default class ChipGroup extends Component {
   }
 
   render() {
-    var {dataCountAmount, dataUserBalance, activeChip, chipArr, onChangeChip,betInfo} = this.props;
+    var {dataCountAmount, dataUserBalance, activeChip, chipArr, onChangeChip, betInfo} = this.props;
 		return (
       <footer id="bottom">
         <span className='chip-group'>
@@ -38,11 +38,11 @@ export default class ChipGroup extends Component {
         </div>
 
         <div className="action-buttom">
-          <div className="ui-button bet-button btn-disabled">下注</div>
+          <div className="ui-button bet-button btn-disabled btn-1">下注</div>
           <div className="bet-tip">请先选择筹码并投注</div>
           <div className="bet-info">{betInfo}</div>
-          <div className="ui-button button-revocation btn-disabled">撤销</div>
-          <div className="ui-button button-clear btn-disabled">清空</div>
+          <div className="ui-button button-revocation btn-disabled btn-2">撤销</div>
+          <div className="ui-button button-clear btn-disabled btn-3">清空</div>
 
         </div>
       </footer>

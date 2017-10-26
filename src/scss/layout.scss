@@ -61,7 +61,7 @@ body {
           top: 80px;
         }
         .dice-animation {
-          top:100px;
+          top:80px;
           animation: 0.2s diceAnimation;
           animation-iteration-count: 3;
         }
@@ -388,4 +388,19 @@ body {
     opacity: 1;
     z-index: 10;
   }
+}
+
+.chipMove {
+  top:100px;
+  animation: 0.2s chipAnimation;
+}
+@keyframes chipAnimation {
+  100% { top: 50px;}
+}
+
+.chipMoveTop {
+  animation: 0.2s chipAnimationTop;
+}
+@keyframes chipAnimationTop {
+  100% { top: 0px;}
 }

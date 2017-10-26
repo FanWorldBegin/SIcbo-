@@ -24,7 +24,7 @@ export default class ChipTable extends Component {
           if(value.style && value.property.hint){
             var typename = value.orders.playType;
             return (
-              <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet( e)}}>
+              <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet(e)}}>
                 <span className="hint">?
                   <div className="hint-box">{
                       window.GAMEPLAY_CONFIGS.LottPlayData[typename].Description}</div>
@@ -38,11 +38,11 @@ export default class ChipTable extends Component {
             )
           } else if (value.style && !value.property.hint){
             return (
-              <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet( e)}}>
+              <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet(e)}}>
                  <span className="tip hove-show">
                    <span className="text">0.00</span>
                    </span>
-                   <div className={` bet-type dice-sheet-${index}`} style={style} name={value.property.name} key={index}></div>
+                   <div className={`bet-type dice-sheet-${index}`} style={style} name={value.property.name} key={index}></div>
                </div>
             )
           }
