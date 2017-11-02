@@ -21,7 +21,13 @@ export default class LayoutTop extends Component {
           <i className='dice dice-3'></i>
         </div>
         <div className="lottery-record">
-          <span className="title">开奖记录</span>
+          <div className="record-title">
+            <span className="title0">开奖记录</span>
+            <span className="title1">大小</span>
+            <span className="title2">单双</span>
+            <span className="title3">和值</span>
+            <span className="title4">查看更多 <span id='triangle-right'></span></span>
+          </div>
             <ul className="record-container">
               {
                  history.map((hlist, index) => {
@@ -37,9 +43,9 @@ export default class LayoutTop extends Component {
                              })
                            }
                          </div>
-                         <div className="rec2">{hlist.winIndex[2]}</div>
-                         <div className="rec3">{Data[hlist.winIndex[0]].property.bs}</div> 
-                         <div className="rec4">{Data[hlist.winIndex[1]].property.bs}</div>
+                         <div className="rec2">{Data[hlist.winIndex[0]].property.bs}</div>
+                         <div className="rec3">{Data[hlist.winIndex[1]].property.bs}</div>
+                         <div className="rec4">{hlist.winIndex[2]}</div>
                          <div className="rec5">第<span>{hlist.index}</span>期</div>
                        </div>
                      </li>

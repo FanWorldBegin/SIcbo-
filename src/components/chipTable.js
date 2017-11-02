@@ -33,7 +33,7 @@ export default class ChipTable extends Component {
                  <span className="tip hove-show">
                    <span className="text">0.00</span>
                    </span>
-                   <div className={` bet-type dice-sheet-${index}`} style={style} name={value.property.name} key={index}></div>
+                   <div className={` bet-type dice-sheet-${index}`} style={value.styleDice} name={value.property.name} key={index}></div>
                </div>
             )
           } else if (value.style && !value.property.hint){
@@ -42,7 +42,7 @@ export default class ChipTable extends Component {
                  <span className="tip hove-show">
                    <span className="text">0.00</span>
                    </span>
-                   <div className={`bet-type dice-sheet-${index}`} style={style} name={value.property.name} key={index}></div>
+                   <div className={`bet-type dice-sheet-${index}`} style={value.styleDice} name={value.property.name} key={index}></div>
                </div>
             )
           }

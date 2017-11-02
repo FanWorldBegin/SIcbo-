@@ -150,6 +150,15 @@ export class PickerGameAppClass extends PureComponent {
       window.G_F_CallFunc(callback)(...args);
     }
 
+    var times = document.getElementsByClassName('times-input')[0].value;
+    // console.log('times');
+    // console.log(times);
+    transactionList.map( val => {
+      val.multiple = (val.multiple * times).toString();
+    })
+    console.log('transactionList');
+    console.log(transactionList);
+    //ensureOrder 下单
     this.props.orderActions.ensureOrder({
       txList: transactionList, selectedAps, selectedLotType, selectedIssue, callback: _callback
     });
