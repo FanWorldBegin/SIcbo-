@@ -25,8 +25,10 @@ var chipArr=new Array(Data.length); // 创建一个空数组，长度为投注�
 for (var x=0;x < chipArr.length ;x++ ) {  //存放每个投注类型中的筹码数
   chipArr[x]=new Array();
 }
+
 var open = true;                          //是否可下注模式
 var chipRecordArr= new Array();           // 数据数组记录每次投注信息
+
 var clientOrders = {
   AwardGroupCode: "AWARD1800",
   ClientOrderId: "402264641",
@@ -40,6 +42,7 @@ var clientOrders = {
   SelectedRate:0,
   Unit:"yuan",
 }
+
 class GameLogicLayout extends PickerGameAppClass {
   constructor(props) {
     super(props);
@@ -55,18 +58,36 @@ class GameLogicLayout extends PickerGameAppClass {
     this.confirmBets = this.confirmBets.bind(this);
     this.state = {
       dataCountAmount: '0.00',
-      dataUserBalance: '1000.00',
+      dataUserBalance: window.USER_INFO.Balance,
       history: [],
       activeChip: 1,
-      betInfo:this.props.transactionStatus,
+      betInfo: this.props.transactionStatus,
       times:1,
+      countDown:0,
+      newList:[],
     };
+    /**
+     * 游戏接口,打开游戏界面时收到传入的玩家信息
+     */
+    window.UserCreditUpdate = function(userInfo) {
+
+    }
     //筹码面值
     this.ChipArr = [
       1, 2, 5, 10, 20, 50, 100, 500, 1000, 5000,
     ];
 
-    this.selectedLotType = props.gameplayData.code;
+    this.selectedLotType = props.gameplayData.code;  //AHK3
+  }
+  /**
+   * [updateUserInfo 设置余额]
+   * @param  {[type]} userInfo [用户的信息]
+   * @return {[type]}          [description]
+   */
+  updateUserInfo = (userInfo) => {
+    this.setState({
+      dataUserBalance: userInfo.Balance
+    })
   }
 
   //history {restArr:[],winIndex:[],index}
@@ -81,7 +102,6 @@ class GameLogicLayout extends PickerGameAppClass {
     });
     let {times} = this.state;
     let val = (chipVal * times).toString();
-    console.log(val);
     this.props.pickerActions.changeMultiple(val);  //设置投注倍数
   }
   /**
@@ -92,40 +112,23 @@ class GameLogicLayout extends PickerGameAppClass {
     this.setState( previousState => {
       return {times: ++previousState.times }
     },function(){
-      // let {times} = self.state;
-      // var {transactionList} = this.props;
-      // transactionList.map((val,index) => {
-      //   val.multiple = (val.multiple / (times-1) * times).toString();
-      //   console.log(index);
-      // })
-      // console.log(transactionList);
     })
   }
   minusTimes() {
-    console.log('minusTimes');
     this.setState( previousState => {
       return {times: --previousState.times >=1 ? previousState.times : 1 }
     }, function() {
-      // let {times} = self.state;
-      // console.log(times);
-      //   var {transactionList} = this.props;
-      //   transactionList.map((val,index) => {
-      //     val.multiple = (val.multiple / (times+1) * times).toString();
-      //     console.log(index);
-      //   })
-      //   console.log(transactionList);
-      //   var minusBtn = document.getElementsByClassName('times-minus')[0];
-      //   if(times == 1) {
-      //     minusBtn.setAttribute()
-      //   }
     })
   }
+
 /**
  * [bet 传入chipTable组件]
  * @param  {[type]} value [betContainer对象]
  * @return {[type]}       [description]
  */
   bet(e) {
+    console.log('**********this.props*******');
+    console.log(this.props);
     if(open) {
       var self = this;      //GameLogic
       var betContainer = e.target.parentNode;            //当前对象
@@ -159,10 +162,10 @@ class GameLogicLayout extends PickerGameAppClass {
               chipAdd.style.cssText = 'left:' + chipLeft + 'px; top:'+ chipTop + 'px; background-position:' + chipBackpo+';'; // 设置css为当前选中筹码的位置（屏幕下侧一排）
               document.body.appendChild(chipAdd); // 先创建一个筹码添加到body里面，然后动画飞到创建位置
               var styleSheet=document.styleSheets[2];
-              console.log('styleSheet');
-              console.log(styleSheet);
-              styleSheet.deleteRule(83);
-              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,83);
+              // console.log('styleSheet');
+              // console.log(styleSheet);
+              styleSheet.deleteRule(98);
+              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,98);
               chipAdd.setAttribute('class', 'chip chip-add chipMove');
               setTimeout(function(){
                 chipAdd.parentNode.removeChild(chipAdd);
@@ -177,7 +180,7 @@ class GameLogicLayout extends PickerGameAppClass {
                   'bitTypeSelf': betContainer,       //指针指向当前选中的投注块
                }
                chipArr[index].length++; //当前选中类型中的筹码数加1
-               chipRecordArr.unshift(json);  //从头部插入当前投注信息
+               chipRecordArr.unshift(json);  //从头部插入当前投注信息(记录每次投注信息0)
                //console.log(chipRecordArr);
                self.showMoney(betContainer,chipMoney);
                //取消btn禁
@@ -185,8 +188,8 @@ class GameLogicLayout extends PickerGameAppClass {
                for(var i=0; i<uiBtn.length; i++) {
                  uiBtn[i].classList.remove('btn-disabled')
                }
-               console.log('chipRecordArr');
-               console.log(chipRecordArr);
+               // console.log('chipRecordArr');
+               // console.log(chipRecordArr);
                nowTime = new Date();
                //点击选号，添加选号
                const {pickerActions, gameplayData} = self.props;
@@ -249,8 +252,8 @@ class GameLogicLayout extends PickerGameAppClass {
                 remChip.style.cssText='left:'+x+'px;top:'+y+'px;background-position:'+targetBackpo+';';
                 document.body.appendChild(remChip); // 先创建一个筹码添加到body里面，然后动画飞到创建位置
                 var styleSheet=document.styleSheets[2];
-                styleSheet.deleteRule(83);
-                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,83);
+                styleSheet.deleteRule(98);
+                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,98);
                 remChip.setAttribute('class', 'chip chip-add chipMove');
                 setTimeout(function(){
                   remChip.parentNode.removeChild(remChip);
@@ -284,12 +287,86 @@ class GameLogicLayout extends PickerGameAppClass {
       }
     }
 
-}//
+}
 
+  getCountDownTime() {
+    self =this;
+    setInterval(function(){
+      self.props.timerActions.applySyncTime('AHK3', 'callback', true);
+      var countDownTime = self.props.lotTimerInfo.leftSeconds;
+      self.setState({
+        countDown:countDownTime
+      });
+      if(countDownTime == 1) {
+      setTimeout(function(){
+        self.props.timerActions.applySyncTime('AHK3', 'callback', true);
+        var openCodes = self.props.openCodesInfo[0].Code;
+        var arr = openCodes.split('');
+        console.log('开奖号码');
+        console.log(arr);
+        self.lotteryDrawCss(arr);
+      },1500)
+      }
+    },1000);
+  }
+
+/**
+ * [第一次获取并显示历史记录]
+ * @return {[type]} [description]
+ */
+  getHistory() {
+    var self = this;
+    setTimeout(function(){
+      self.props.timerActions.applySyncTime('AHK3', 'callback', true);
+      var openCodeList = self.props.openCodesInfo;
+    //  console.log(self.props.openCodesInfo);
+      var newList = [];
+      openCodeList.map((item, index) => {
+        var codeArr = item.Code.split('');
+        var defineArr = self.defineCodeArr(codeArr);
+        newList.push({code: codeArr, time: item.Issue, sum: defineArr.sum, bigSmall: defineArr.bigSmall, oddEven:defineArr.oddEven});
+      })
+      self.setState({
+        newList: newList,
+      });
+    },1000)
+}
+
+/**
+ * [判断大小单双值]
+ * @param  {[type]} arr [description]
+ * @return {[type]}     [description]
+ */
+ defineCodeArr(arr){
+   var rest = {};
+   var sum = 0;
+   var bigSmall;
+   var oddEven;
+   for(var i=0; i<arr.length; i++){
+     sum += parseInt(arr[i]);
+   }
+
+   if(sum%2 == 0) {
+     oddEven = '偶';
+   }else if (sum%2 == 1) {
+     oddEven = '奇';
+   }
+   if(sum >= 11 && sum <= 17) {
+     bigSmall = "大";
+   } else if (sum>=4 && sum<=10) {
+     bigSmall = "小";
+   } else if (sum==3 || sum==18) {
+      bigSmall = "豹";
+      oddEven = '豹'
+   }
+   rest = {sum:sum, bigSmall:bigSmall, oddEven:oddEven};
+   return rest;
+
+ }
   componentDidMount() {
     var styleSheet=document.styleSheets[2];
-    console.log('styleSheet');
-    console.log(styleSheet);
+    // console.log('styleSheet');
+    // console.log(styleSheet);
     // //取消右键菜单
     // oncontextmenu=function(){return false}
     const self = this;
@@ -308,7 +385,8 @@ class GameLogicLayout extends PickerGameAppClass {
     });
 
     self.init();
-
+    self.getCountDownTime();
+    this.getHistory();
     // let postData = {
     //   method: 'order',
     //   data: {
@@ -483,8 +561,8 @@ class GameLogicLayout extends PickerGameAppClass {
     var targetTop = targetChip.getBoundingClientRect().top;
 
     var styleSheet=document.styleSheets[2];
-    styleSheet.deleteRule(83);
-    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,83);
+    styleSheet.deleteRule(98);
+    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,98);
     chipRemove.setAttribute('class', 'chip chip-add chipMove');
     setTimeout(function(){
       chipRemove.remove();
@@ -518,28 +596,29 @@ class GameLogicLayout extends PickerGameAppClass {
   }
 
 
-  lotteryDrawCss() {
+  lotteryDrawCss(arr = [4,5,6]) {
     self = this;
     var glass = document.getElementsByClassName('dice-panel')[0].getElementsByClassName('glass')[0];
     document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='none';
     var RegExp =/[1-6]/;
     var resArr=[];  //记录开奖号码
-    var arr = [4,5,6]; //开奖号码
-    var {dataCountAmount,dataUserBalance} = this.state;
-    if(chipRecordArr.length) {
-      var dataCountAmount = parseInt(dataCountAmount);
-      var dataUserBalance = Number(dataUserBalance);
-      var balance = calculate.accSub(dataUserBalance,dataCountAmount);
+    var arr = arr; //开奖号码
+    // var {dataCountAmount,dataUserBalance} = this.state;
+      // var dataCountAmount = parseInt(dataCountAmount);
+      // var dataUserBalance = Number(dataUserBalance);
+      // var balance = calculate.accSub(dataUserBalance,dataCountAmount);
       var uiBtn = document.getElementsByClassName('ui-button');
       for(var i=0; i<uiBtn.length; i++) {
         uiBtn[i].classList.add('btn-disabled')
       }
-      this.setState({
-        dataUserBalance: balance +'.00',   //修改余额
-      });
+    //  console.log(arr);
+      // this.setState({
+      //   dataUserBalance: balance +'.00',   //修改余额
+      // });
       var dices =  glass.getElementsByTagName('i');
-      console.log(typeof dices);
+      //console.log(typeof dices);
       for(let i=0; i<dices.length; i++) {
+        console.log('i');
         dices[i].setAttribute('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
         dices[i].style.left = (i*52)+'px';
         setTimeout(function() {
@@ -580,15 +659,18 @@ class GameLogicLayout extends PickerGameAppClass {
           },2000)
 
       },1000)
-    }
   }
+  // componentWillReceiveProps(nextProps) {
+  //   // if()
+  //   console.log(nextProps.transactionStatus);
+  // }
 /**
  * [confirmBets 确认投注]
  * @return {[type]} [description]
  */
   confirmBets(){
     if(chipRecordArr.length) { //存在投注记录
-      this.onEnsureOrder();    //下注
+      this.props.orderActions.ensureOrder(this.props.transactionList);    //下注
       document.getElementsByClassName('bet-info')[0].style.visibility='visible';
       this.lotteryDrawCss();
     }
@@ -739,8 +821,8 @@ class GameLogicLayout extends PickerGameAppClass {
       var targetTop = targetChip.getBoundingClientRect().top;
       if(chip.className == 'chip chip-add win') {
         var styleSheet=document.styleSheets[2];
-        styleSheet.deleteRule(83);
-        styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,83);
+        styleSheet.deleteRule(98);
+        styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,98);
         chip.setAttribute('class', 'chip chip-add chipMove');
         var chips = document.getElementsByClassName('chipMove');
         setTimeout(function(){
@@ -750,8 +832,8 @@ class GameLogicLayout extends PickerGameAppClass {
         },200);
       }else if(chip.className == 'chip chip-add lose'){
         var styleSheet=document.styleSheets[2];
-        styleSheet.deleteRule(85);
-        styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,85);
+        styleSheet.deleteRule(100);
+        styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,100);
         chip.setAttribute('class', 'chip chip-add chipMoveTop');
         var chipLose = document.getElementsByClassName('chipMoveTop');
         setTimeout(function(){
@@ -763,7 +845,7 @@ class GameLogicLayout extends PickerGameAppClass {
     }
 
     var {dataUserBalance} = this.state;
-    var balanceMoney = calculate.accAdd(Number(dataUserBalance), sumMoney);
+    var balanceMoney = calculate.accAdd(G_F_MoneyFormat(dataUserBalance), sumMoney);
     this.setState ({
       dataUserBalance: balanceMoney+'.00',
     })
@@ -787,10 +869,10 @@ class GameLogicLayout extends PickerGameAppClass {
       info='';
      }
      return info;
+     //console.log(pickerActions.changeRetRate(0));
   }
 
 	render() {
-    var {dataCountAmount, dataUserBalance, history, activeChip, times} = this.state;
     var betInfo;
     const {
       pickerActions, timerActions, orderActions,
@@ -803,17 +885,21 @@ class GameLogicLayout extends PickerGameAppClass {
       LRYLInfo, openCodesInfo,
       onAppResponse,
     } = this.props;
-     console.log('this.props');
-     console.log(this.props);
     var betInfo = this.props.transactionStatus;
     betInfo = this.betInfo( betInfo.type );
-    console.log('游戏下注信息');
-    console.log(betInfo);   //游戏下注信息
+    var {dataCountAmount, dataUserBalance, history, activeChip, times, countDown, newList} = this.state;
+    if(countDown == 1) {
+      this.props.timerActions.applySyncTime('AHK3', 'callback', true);
+      var openCodes = this.props.lotTimerInfo.openCodesInfo;
+      console.log('开奖号码哦：'+ openCodes);
+    }
+    // console.log('游戏下注信息');
+    // console.log(betInfo);   //游戏下注信息
 
 		return (
       <div className="container-main">
         <div className="dice-top">
-          <DicePanel history={history} />
+          <DicePanel history={newList} countDown={countDown}/>
         </div>
         <div className="dice-table">
           <ChipTable onBet={val => this.bet(val)}/>
@@ -824,7 +910,7 @@ class GameLogicLayout extends PickerGameAppClass {
            chipArr={this.ChipArr}
            activeChip={activeChip}
            dataCountAmount={dataCountAmount}
-           dataUserBalance={dataUserBalance}
+           dataUserBalance={G_F_MoneyFormat(dataUserBalance)}
            betInfo={betInfo}
            times={times}
            onAddTimes={this.addTimes.bind(this)}

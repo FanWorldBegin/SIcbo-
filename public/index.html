@@ -83,11 +83,11 @@
     </script>
     <script>
       // function()
-      window.LoadScript('js/platform.config.js', function() {
+      window.LoadScript('public-js/platform.config.js', function() {
         console.log(window.GAMEPLAY_CONFIGS)
         G_O_EventEmitter.emit('RESOURCE_READY');
       });
-      window.LoadScript('js/client.mapper.js', function(res) {
+      window.LoadScript('public-js/client.mapper.js', function(res) {
         window.NAMES_MAPPER = KEY_MAPPERS;
         initGame();
       });

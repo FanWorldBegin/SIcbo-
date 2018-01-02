@@ -18,6 +18,69 @@ body {
       background-image: url('../img/top-panel.png');
       position: relative;
       top: -30px;
+      .time-continer {
+        position: absolute;
+        z-index: 2;
+        color: #fff;
+        top: 70px;
+        left: 340px;
+
+      }
+      .countDown {
+        color:#fff;
+        position: absolute;
+        top:120px;
+        left:200px;
+        width: 200px;
+        .times {
+          display: inline-block;
+          width: 28px;
+          height: 40px;
+          background-image: url('../img/countDown.png');
+        }
+        .colon {
+          display: inline-block;
+          width: 10px;
+          height: 40px;
+          background-position: -302px 0;
+          position: absolute;
+          top :0px;
+          left :60px;
+        }
+        .sec {
+          margin-left: 20px;
+        }
+        .times-1 {
+          background-position: 0 0;
+        }
+        .times-2 {
+          background-position: -28px 0;
+        }
+        .times-3 {
+          background-position: -62px 0;
+        }
+        .times-4 {
+          background-position: -90px 0;
+        }
+        .times-5 {
+          background-position: -120px 0;
+        }
+        .times-6 {
+          background-position: -150px 0;
+        }
+        .times-7 {
+          background-position: -182px 0;
+        }
+        .times-8 {
+          background-position: -210px 0;
+        }
+        .times-9 {
+          background-position: -242px 0;
+        }
+        .times-0 {
+          background-position: -272px 0;
+        }
+      }
       .glass {
         position: absolute;
         left:420px;
@@ -83,6 +146,9 @@ body {
         overflow: scroll;
         .record-title {
           font-size: 12px;
+          .title0 {
+            margin-left: 4px;
+          }
           .title1 {
             margin-left: 30px;
           }
@@ -90,7 +156,7 @@ body {
             margin-left: 16px;
           }
           .title3 {
-            margin-left: 26px;
+            margin-left: 18px;
           }
           .title4 {
             margin-left: 40px;
@@ -118,7 +184,7 @@ body {
                 cursor: default;
                }
                .rec1 {
-                 width: 70px;
+                 width: 60px;
                  text-align: left;
                  //设置骰子
                  .dice-number {
@@ -150,20 +216,23 @@ body {
                .rec2 {
                  height: 100%;
                  vertical-align: top;
-                 margin-left: 10px;
+                 margin-left: 20px;
                  width: 20px;
+                 text-align: center;
                }
                .rec3 {
                  height: 100%;
                  vertical-align: top;
                  margin-left: 20px;
                  width: 20px;
+                 text-align: center;
                }
                .rec4 {
                  height: 100%;
                  vertical-align: top;
-                 margin-left: 30px;
+                 margin-left: 20px;
                  width: 20px;
+                 text-align: center;
                }
                .rec5 {
                  height: 100%;
@@ -454,7 +523,7 @@ body {
          border-radius: 4px;
          border: 1px solid #fff;
          top: -4px;
-         left:650px;
+         left:900px;
          visibility: hidden;
        }
        .bet-info {
@@ -468,7 +537,7 @@ body {
          border-radius: 4px;
          border: 1px solid #fff;
          top: 76px;
-         left:650px;
+         left:900px;
          visibility: hidden;
        }
       }

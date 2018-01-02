@@ -15,16 +15,17 @@ export default class App extends Component {
 		super(props);
 		const self = this;
 		G_O_EventEmitter.subscript('RESOURCE_READY', (res) => {
-			const gameplayData = G_F_WrapGameNavConfig('AHK3');
-			self.setState({
+			console.log('sds');
+		const gameplayData = G_F_WrapGameNavConfig('AHK3');
+		self.setState({
 				gameplayData: gameplayData.props.gameplayData
 			});
-			// console.log(gameplayData);
 		});
 	}
 
 	render() {
 		const {gameplayData} = this.state;
+		console.log(gameplayData);
 		return (
 			<LoginSelector>
 				<LotGameRedux gameplayData={gameplayData} sectionId={'AHK3'}/>

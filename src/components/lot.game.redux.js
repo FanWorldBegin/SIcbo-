@@ -9,6 +9,9 @@ import {GameLogic} from './gameLogic.js';
 const {GetAllPickerStores} = PickerStores;
 
 export default class LotGameApp extends Component {
+  constructor(props) {
+		super(props);
+  }
   componentDidMount() {
     this.storeCollections = PickerStores.GetAllPickerStores();
   }
@@ -18,6 +21,7 @@ export default class LotGameApp extends Component {
       gameplayData,
       sectionId
     } = this.props;
+    console.log(this.props);
 
     // const {collections} = PickerStores;
     const store = (PickerStores.GetAllPickerStores())[sectionId]; //获取对应store
