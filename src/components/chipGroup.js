@@ -1,3 +1,7 @@
+/**
+ * [id 下侧筹码投注面板]
+ * @type {String}
+ */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';

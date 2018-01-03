@@ -1,3 +1,8 @@
+/**
+ * [state 上侧面板，显示骰盅, 奖期倒计时，开奖记录]
+ * @type {Object}
+ */
+
 import React, {Component} from 'react';
 import propTypes from 'prop-types';
 import ReactDOM from 'react-dom';

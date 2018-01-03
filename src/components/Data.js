@@ -1,3 +1,8 @@
+/**
+ * [playType]: 问号悬浮规则显示
+ *
+ *
+ */
 var Data = [
   {property: {index:0, name:'large', odds:1, bs:"大", hint:true,}, orders: {locate:0, numberUnit:'0', display:'大', gameplayGroup:4 ,group:0, actionc:1, type:'PICKUP', playType: 'K3_HZDXDS'}, style: { width:135, height:86, left:0, top:0}, styleDice:{ height:'100%', width:'100%','borderRadius':'40px 10px 10px 10px'}}, //大
   {property: {index:1, name:'small', odds:1, bs:"小",},  orders: {locate:0, numberUnit:'1', display:'小', gameplayGroup:4 ,group:0, actionc:1, type:'PICKUP'}, style: {width:132, height:84, left:878, top:0, }, styleDice:{ height:'100%', width:'100%','borderRadius':'10px 40px 10px 10px'}}, //小

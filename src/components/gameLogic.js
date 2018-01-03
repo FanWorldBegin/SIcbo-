@@ -34,7 +34,7 @@ var clientOrders = {
   ClientOrderId: "402264641",
   Issue: "20170918-062",
   LottCata: "K3",
-  LottType: "AHK3",
+  LottType: window.LOTT_INFO || 'AHK3',
   Multiple: 1,
   OriginalRecord: "1",
   PlayType: "K3T_3T",
@@ -77,7 +77,7 @@ class GameLogicLayout extends PickerGameAppClass {
     this.ChipArr = [
       1, 2, 5, 10, 20, 50, 100, 500, 1000, 5000,
     ];
-
+    //下注时需传入的参数
     this.selectedLotType = props.gameplayData.code;  //AHK3
   }
   /**
@@ -155,9 +155,9 @@ class GameLogicLayout extends PickerGameAppClass {
           var chipLeft = chipSelect.getBoundingClientRect().left; //当前选中筹码的位置(下方)
           var chipTop = chipSelect.getBoundingClientRect().top;
           var chipBackpo =  window.getComputedStyle(chipSelect , null).getPropertyValue('background-position'); //当前选中筹码的 backgroundPosition
-          var {dataCountAmount,dataUserBalance} = self.state;
+          var {dataCountAmount,dataUserBalance, times} = self.state;
           /*********************当前投注金额，以后待修改***********************************/
-          var nowCountAmount = dataCountAmount*1 + chipMoney*1; //当前投注金额
+          var nowCountAmount = dataCountAmount*1 + chipMoney*times; //当前投注金额
           if(new Date() - nowTime > 300) {
           /*********************判断余额是否足够***********************************/
             if(nowCountAmount > dataUserBalance*1) {
@@ -238,12 +238,13 @@ class GameLogicLayout extends PickerGameAppClass {
                 //确认选号
                  setTimeout(() => {
                    const {selectedNumbers} = self.props;
+                   console.log('**********this.props添加购物车*******');
+                   console.log(this.props);
                    //添加到购物车 --transactionList ,selectedNumber清空
                    self.onAddTransaction(selectedNumbers.verifyInfo);
                    //添加购物车后计算金额
                    self.showMoney(betContainer,chipMoney);
-                   console.log('**********this.props添加购物车*******');
-                   console.log(this.props);
+
                  }, 10);
                }, 10);
             }
@@ -343,7 +344,7 @@ class GameLogicLayout extends PickerGameAppClass {
   getHistory() {
     var self = this;
     setTimeout(function(){
-      self.props.timerActions.applySyncTime('AHK3', 'callback', true);
+      self.props.timerActions.applySyncTime(clientOrders.LottType, 'callback', true);
       var openCodeList = self.props.openCodesInfo;  //历史记录列表
       var newList = [];
       openCodeList.map((item, index) => {
@@ -431,10 +432,10 @@ class GameLogicLayout extends PickerGameAppClass {
  */
   showMoney(bitTypeSelf,chipMon) {
     var chipMon = Number(chipMon);
-    var sum = 0;
       var tipMoney =parseInt(bitTypeSelf.getElementsByClassName('text')[0].innerText);   //获取当前投注块的标签中的总筹码金额
       var money = tipMoney + chipMon;
       if(money>=0) {
+        var sum = 0;
           bitTypeSelf.getElementsByClassName('text')[0].innerHTML = tipMoney + chipMon + '.00';
           //更新投注总金额
           // for(let i=0; i<chipRecordArr.length; i++){
@@ -711,23 +712,33 @@ class GameLogicLayout extends PickerGameAppClass {
   //   console.log(nextProps.transactionStatus);
   // }
 /**
- * [confirmBets 确认投注]
+ * [confirmBets 确认下注]
  * @return {[type]} [description]
  */
   confirmBets(){
     var self =this;
-    if(chipRecordArr.length) { //存在投注记录
-      var conform = confirm("确认投注？");
-      if(conform == true) {
-        this.props.orderActions.ensureOrder(this.props.transactionList);    //下注
-        setTimeout(function(){
-          console.log('**************下注props***********');
-          console.log(self.props);
-        })
-
-        document.getElementsByClassName('bet-info')[0].style.visibility='visible';
-        this.conformCss();
-      }
+    const {transactionList, selectedIssue, orderActions} = this.props;
+    if(transactionList.length > 0) { //存在投注记录
+      // var conform = confirm("确认投注？");
+      // if(conform == true) {
+        // this.props.orderActions.ensureOrder(this.props.transactionList);    //下注
+        orderActions.ensureOrder({
+          txList: transactionList, selectedAps: {}, selectedLotType: this.selectedLotType, selectedIssue, callback: this.onOrderRes
+        });
+      // }
+    }
+  }
+  /**
+   * [onOrderRes 投注成功回调函数]
+   * @param  {[type]} res [description]
+   * @return {[type]}     [description]
+   */
+  onOrderRes = (res) => {
+    if(res.Header.ErrCode.Code == 0) {
+      console.log('**************下注成功props***********');
+      console.log(self.props);
+      document.getElementsByClassName('bet-info')[0].style.visibility='visible';
+      this.conformCss();
     }
   }
 /**
@@ -910,7 +921,11 @@ class GameLogicLayout extends PickerGameAppClass {
 //       chipArr[i].length = 0;
 //     }
 //   }
-
+/**
+ * [betInfo 下注时状态提示]
+ * @param  {[type]} betInfo [description]
+ * @return {[type]}         [description]
+ */
   betInfo(betInfo){
     var info;
     switch(betInfo) {

@@ -1,3 +1,7 @@
+/**
+ * [style 根据Data 值 渲染桌面投注块]
+ * @type {Object}
+ */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
