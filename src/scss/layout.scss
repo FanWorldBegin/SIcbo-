@@ -18,12 +18,40 @@ body {
       background-image: url('../img/top-panel.png');
       position: relative;
       top: -30px;
+      .logo {
+        position: absolute;
+        z-index:2;
+        width: 146px;
+        height: 50px;
+        //background-color: orange;
+        left:20px;
+        top:56px;
+        padding-left: 20px;
+        .logo-img{
+          position: absolute;
+          height: 100%;
+          z-index: 3;
+        }
+      }
+      .dice-rule {
+        position: absolute;
+        z-index:2;
+        width: 146px;
+        height: 24px;
+        color: #fff;
+        font-size: 12px;
+      //  background-color: orange;
+        left: 20px;
+        top: 120px;
+        line-height: 24px;
+        text-align: center;
+      }
       .time-continer {
         position: absolute;
         z-index: 2;
         color: #fff;
         top: 70px;
-        left: 340px;
+        left: 200px;
 
       }
       .countDown {

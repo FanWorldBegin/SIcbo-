@@ -8,17 +8,16 @@ export default class ChipGroup extends Component {
   }
 
   componentDidMount() {
-
   }
 
   render() {
-    var {dataCountAmount, dataUserBalance, activeChip, chipArr, onChangeChip, betInfo, times, onAddTimes, onMinusTimes} = this.props;
+    var { dataCountAmount, dataUserBalance, activeChip, chipArr, onChangeChip, betInfo, times, onAddTimes, onMinusTimes} = this.props;
 		return (
       <footer id="bottom">
         <div className="dice-balance">
           <div className="bet-amount">
             <label>投注额:</label>
-            ￥<span className="data-count-amount">{dataCountAmount*times}</span>
+            ￥<span className="data-count-amount">{dataCountAmount}</span>
           </div>
           <div className="bet-balance">
             <label>余额:</label>
@@ -39,7 +38,8 @@ export default class ChipGroup extends Component {
 
         <div className="dice-times">
           <div className='times-text'>
-            <span>倍投</span> <span className='times-question'>?</span>
+            <span>倍投</span>
+            {/* <span className='times-question'>？</span> */}
           </div>
           <div className="times-number">
             <span className="times-minus" onClick={onMinusTimes}>-</span> <input className='times-input' type="tel" readOnly="true" value={times}/> <span className="times-add" onClick={onAddTimes}>+</span>
