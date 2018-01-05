@@ -20,8 +20,8 @@ export default class ConfirmWindow extends Component {
     var betbtn = document.getElementsByClassName('bet-button');
     //点击投注按钮
     betbtn[0].onclick = function() {
-      document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='none';
       if(!this.classList.contains('btn-disabled')){
+        document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='none';
         self.confirmBets();
       }
     }

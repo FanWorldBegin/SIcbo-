@@ -5,14 +5,14 @@ import Data from './data.js';
 import calculate from './calculate.js';
 import ChipGroup from './chipGroup.js';
 import ChipTable from "./chipTable.js";
-import {DicePanelConnect} from './dicePanel.js';
+import DicePanel from './dicePanel.js';
 import {prizeWinning} from './priceWinning.js'
 import {PickerGameAppClass} from './lot.game.basic.helper.js';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {PickerActions} from 'matrix-web-game-actions';
 import ConfirmWindow from './confirmWindow.js';
-
+import OrderList from './orderList.js';
 const {pickerActions, timerActions, orderActions} = PickerActions;
 
 // import {bindActionCreators} from 'redux';
@@ -967,8 +967,9 @@ class GameLogicLayout extends PickerGameAppClass {
 		return (
       <div className="container-main">
         <div className="dice-top">
-          {/* <DicePanelConnect clientOrders={clientOrders}  timerActions = {this.props.timerActions} lotTimerInfo={this.props.lotTimerInfo}  openCodesInfo={this.props.openCodesInfo} chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}/> */}
-          <DicePanelConnect clientOrders={clientOrders}   chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}/>
+          <DicePanel clientOrders={clientOrders}  timerActions = {this.props.timerActions} lotTimerInfo={this.props.lotTimerInfo} selectedIssue={selectedIssue}
+            openCodesInfo={this.props.openCodesInfo} chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}  pickerActions={pickerActions}/>
+          {/* <DicePanelConnect clientOrders={clientOrders}   chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}/> */}
         </div>
         <div className="dice-table">
           <ChipTable onBet={val => this.bet(val)}/>
@@ -986,7 +987,8 @@ class GameLogicLayout extends PickerGameAppClass {
            transactionList={transactionList}
            />
         </div>
-        <ConfirmWindow transactionList={transactionList} selectedIssue={selectedIssue} orderActions={orderActions} conformCss={this.conformCss} dataCountAmount={dataCountAmount} transactionStatus={transactionStatus} />
+        <ConfirmWindow transactionList={transactionList} selectedIssue={selectedIssue} orderActions={orderActions} conformCss={this.conformCss} dataCountAmount={dataCountAmount} transactionStatus={transactionStatus} pickerActions={pickerActions}/>
+        {/* <OrderList pickerActions={pickerActions}></OrderList> */}
       </div>
 		)
 	}

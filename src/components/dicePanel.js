@@ -9,12 +9,6 @@ import Countdown from './countDown.js';
 import Data from './data.js';
 import calculate from './calculate.js';
 import {prizeWinning} from './priceWinning.js'
-import {PickerGameAppClass} from './lot.game.basic.helper.js';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {PickerActions} from 'matrix-web-game-actions';
-import ConfirmWindow from './confirmWindow.js';
-const {pickerActions, timerActions, orderActions} = PickerActions;
 export default class dicePanel extends Component {
   constructor(props) {
     super(props);
@@ -23,60 +17,48 @@ export default class dicePanel extends Component {
       countDown: 90000000,
       history:[],
       lastIssue: '',
+      isTimeout: false,
     }
     this.getCountDownTime = this.getCountDownTime.bind(this);
+    this.getNewNumber = this.getNewNumber.bind(this);
   }
-
-
+ codeQuery(e){
+   //console.log('dfdsffsfsdfs');
+   console.log(e);
+ }
   componentDidMount() {
     var self = this;
     this.getHistory();
-    var issuQuest = setInterval(function(){
-      if(self.state.history.length){
-        var issue = self.state.history[0].time; //奖期
-        var index = issue.indexOf('-');
-        var data = issue.substring(0,index);
-        var number = issue.substring(index+1);
-        var digit = Number(number).toString().length;
-        switch(digit) {
-          case 1:
-          issue = data +'-00'+ (Number(number) +1); break;
-          case 2:
-          issue = data +'-0'+ (Number(number) +1); break;
-          case 3:
-          issue = data +'-'+ (Number(number) +1); break;
-          default:
-          issue = data +'-'+ (Number(number) +1);
-        }
-        self.setState({
-          issue
-        })
-        window.clearInterval(issuQuest);
-      }
-    },1000)
+    // var issuQuest = setInterval(function(){
+    //   if(self.state.history.length){
+    //     self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
+    //     self.props.pickerAction.queryOpenCode('', this.codeQuery,20)
+    //     self.setState({
+    //       issue : self.props.lotTimerInfo.nextIssue,
+    //       countDown : self.props.lotTimerInfo.leftSeconds,
+    //       //countDown: 3,
+    //     })
+    //
+    //     window.clearInterval(issuQuest);
+    //   }
+    // },1000)
     this.getCountDownTime();
+    // setTimeout(function(){
+    //   self.props.pickerActions.queryOrderReacords(self.props.clientOrders.LottType, ()=>{console.log('s');})
+    // },1000)
 
   }
-  //返回历史记录
-  getHistoryCallBack(){
-    // var self =this;
-    // this.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'self.getHistoryCallBack()', true);
-    // var openCodeList = self.props.openCodesInfo;  //历史记录列表
-    // console.log('历史记录列表');
-    // console.log(openCodeList);
-    // var newList = [];
-  }
+
   /**
    * [第一次获取并显示历史记录]
    * @return {[type]} [description]
    */
     getHistory() {
       var self = this;
-      var getHistory=setInterval(function(){
-        self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
+      var getHistoryInterval=setInterval(function(){
+            self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
+            self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
             var openCodeList = self.props.openCodesInfo;  //历史记录列表
-            console.log('历史记录列表');
-            console.log(openCodeList);
             var newList = [];
             openCodeList.map((item, index) => {
               var codeArr = item.Code.split('');
@@ -85,17 +67,42 @@ export default class dicePanel extends Component {
             })
             self.setState({
               history: newList,
+              issue : self.props.lotTimerInfo.nextIssue,
+              countDown : self.props.lotTimerInfo.leftSeconds,
             });
-            console.log(openCodeList);
             if(openCodeList.length){
-              self.setState({
-                lastIssue: openCodeList[0].Issue,
-              })
-              console.log(self.state.lastIssue);
-              window.clearInterval(getHistory);
+              //监听倒计时
+              self.questNumber = setInterval(function(){
+                self.getNewNumber();
+              }, 2000)
+              window.clearInterval(getHistoryInterval);
             }
       },1000)
   }
+/**
+ * [countDownFinish 倒计时结束触发]
+ * @return {[type]} [description]
+ */
+  countDownFinish(){
+    var self =this;
+    setTimeout(function(){
+      self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
+      self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
+      var countDownTime = self.props.lotTimerInfo.leftSeconds;
+      var issue = self.props.lotTimerInfo.nextIssue;
+      self.setState({
+        countDown: countDownTime,
+        issue
+      });
+    },1000)
+    self.questNumber = setInterval(function(){
+      self.getNewNumber();
+    }, 2000)
+  }
+  //返回历史记录
+  getHistoryCallBack(){
+  }
+
   /**
    * [判断大小单双值]
    * @param  {[type]} arr [description]
@@ -127,72 +134,54 @@ export default class dicePanel extends Component {
      return rest;
 
    }
+
+   getNewNumber(){
+     var self = this;
+         self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
+         this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
+         var openCodeList = self.props.openCodesInfo;  //历史记录列表
+         self.setState({
+           issue : self.props.selectedIssue,
+         })
+         var openingIssue = self.props.lotTimerInfo.openingIssue; //当前期号
+         var lastIssue = self.props.openCodesInfo[0].Issue; //上一期期号
+         // console.log('openingIssue：' + openingIssue);
+         // console.log('openCodesInfo[0].issue：' + lastIssue);
+
+        // 发生变化更新
+         if(openingIssue == lastIssue){
+           var openCodes = self.props.openCodesInfo[0].Code;
+           var arr = openCodes.split('');
+           console.log('开奖号码');
+           console.log(arr);
+           self.lotteryDrawCss(arr);
+             //更新历史记录
+             var newList = [];
+             openCodeList.map((item, index) => {
+               var codeArr = item.Code.split('');
+               var defineArr = self.defineCodeArr(codeArr);
+               newList.push({code: codeArr, time: item.Issue, sum: defineArr.sum, bigSmall: defineArr.bigSmall, oddEven:defineArr.oddEven});
+             })
+             self.setState({
+               history: newList,
+             },() => {});
+             window.clearInterval(this.questNumber)
+         }
+   }
   getCountDownTime() {
     var self =this;
     setInterval(function(){
       if(self.props){
-        self.props.timerActions.applySyncTime('AHK3', 'callback', true);
+        self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
+        self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
         var countDownTime = self.props.lotTimerInfo.leftSeconds;
+        var issue = self.props.lotTimerInfo.nextIssue;
         self.setState({
-          countDown: countDownTime
+          countDown: countDownTime,
+          issue
         });
-        if(countDownTime == 1) {
-          setTimeout(function(){
-            console.log('倒计时为0');
-            var openCode = setInterval(function(){
-                self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
-                var openCodeList = self.props.openCodesInfo;  //历史记录列表
-                var nowIssue = openCodeList[0].Issue; //当前期号
-                var {lastIssue} = self.state; //上一期期号
-                console.log('上期期号' + lastIssue);
-                console.log('当前期号' + nowIssue);
-                //发生变化更新
-                if(nowIssue !== lastIssue){
-                  var openCodes = self.props.openCodesInfo[0].Code;
-                  var arr = openCodes.split('');
-                  console.log('开奖号码');
-                  console.log(arr);
-                  self.lotteryDrawCss(arr);
-                    //更新历史记录
-                    var newList = [];
-                    openCodeList.map((item, index) => {
-                      var codeArr = item.Code.split('');
-                      var defineArr = self.defineCodeArr(codeArr);
-                      newList.push({code: codeArr, time: item.Issue, sum: defineArr.sum, bigSmall: defineArr.bigSmall, oddEven:defineArr.oddEven});
-                    })
-                    self.setState({
-                      history: newList,
-                    },() => {
-                      var issue = self.state.history[0].time; //奖期
-                      var index = issue.indexOf('-');
-                      var data = issue.substring(0,index);
-                      var number = issue.substring(index+1);
-                      var digit = Number(number).toString().length;
-                      switch(digit) {
-                        case 1:
-                        issue = data +'-00'+ (Number(number) +1); break;
-                        case 2:
-                        issue = data +'-0'+ (Number(number) +1); break;
-                        case 3:
-                        issue = data +'-'+ (Number(number) +1); break;
-                        default:
-                        issue = data +'-'+ (Number(number) +1);
-                      }
-                      self.setState({
-                        issue
-                      })
-                    });
-                    self.setState({
-                      lastIssue: nowIssue,
-                    });
-                    window.clearInterval(openCode);
-                }
-          },1000)
-
-          },1000)
-        }
       }
-    },1000);
+    },30000);
   }
 
   lotteryDrawCss(arr = [4,5,6]) {
@@ -202,18 +191,10 @@ export default class dicePanel extends Component {
     var RegExp =/[1-6]/;
     var resArr=[];  //记录开奖号码
     var arr = arr; //开奖号码
-    // var {dataCountAmount,dataUserBalance} = this.state;
-      // var dataCountAmount = parseInt(dataCountAmount);
-      // var dataUserBalance = Number(dataUserBalance);
-      // var balance = calculate.accSub(dataUserBalance,dataCountAmount);
       var uiBtn = document.getElementsByClassName('ui-button');
       for(var i=0; i<uiBtn.length; i++) {
         uiBtn[i].classList.add('btn-disabled')
       }
-    //  console.log(arr);
-      // this.setState({
-      //   dataUserBalance: balance +'.00',   //修改余额
-      // });
       var dices =  glass.getElementsByTagName('i');
       //console.log(typeof dices);
       for(let i=0; i<dices.length; i++) {
@@ -342,7 +323,7 @@ export default class dicePanel extends Component {
     }
 
   render() {
-    var {issue, countDown} = this.state;
+    var {issue, countDown, isTimeout} = this.state;
     var {history} = this.state;
     return (
       <div className="dice-panel">
@@ -350,7 +331,7 @@ export default class dicePanel extends Component {
         <div className="dice-rule">规则鼠标悬浮 ？查看</div>
       <div className="time-continer"><span className="dicePanel-issue">{issue}</span>期截止</div>
          <div className="countDown">
-           <Countdown start= {countDown} freq= {60} needBg= {false} needProgress= {false} onTimeout={e=>('sfs')}/>
+           <Countdown start= {countDown} freq= {60} needBg= {false} needProgress= {false} onTimeout={e => this.countDownFinish()}/>
            <span className="colon times"></span>
          </div>
         <div className="glass">
@@ -397,27 +378,3 @@ export default class dicePanel extends Component {
     )
   }
 }
-
-function selector(state) {
-  return {
-    openCodesInfo: state.openCodesInfo,
-    selectedIssue: state.selectedIssue,
-    // optionalLocator: state.optionalLocator,
-    // selectedGameplay: state.selectedGameplay,
-    combinationInfo: state.combinationInfo,
-    selectedNumbers: state.selectedNumbers,
-    transactionList: state.transactionList,
-    txHistoryList: state.txHistoryList,
-    lotTimerInfo: state.lotTimerInfo,
-    LRYLInfo: state.LRYLInfo,
-    transactionStatus: state.transactionStatus
-  }
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    pickerActions: bindActionCreators(pickerActions, dispatch),
-    timerActions: bindActionCreators(timerActions, dispatch),
-    orderActions: bindActionCreators(orderActions, dispatch)
-  };
-}
-export const DicePanelConnect = connect(selector, mapDispatchToProps)(dicePanel);
