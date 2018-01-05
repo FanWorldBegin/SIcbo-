@@ -1,7 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-export class PickerGameAppClass extends PureComponent {
+export class PickerGameAppClass extends Component {
   constructor(props) {
     super(props);
     this.selectedLotType = props.gameplayData.code;

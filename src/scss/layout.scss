@@ -15,17 +15,17 @@ body {
     .dice-top {
       width: 996px;
       height: 220px;
-      background-image: url('../img/top-panel.png');
+      background-image: url('../img/top-panel2.png');
       position: relative;
       top: -30px;
       .logo {
         position: absolute;
         z-index:2;
-        width: 146px;
+        width: 126px;
         height: 50px;
-        //background-color: orange;
-        left:20px;
-        top:56px;
+        background-color: rgba(0, 0, 0, 0.2);
+        left: 20px;
+        top: 56px;
         padding-left: 20px;
         .logo-img{
           position: absolute;
@@ -40,7 +40,7 @@ body {
         height: 24px;
         color: #fff;
         font-size: 12px;
-      //  background-color: orange;
+        background-color: rgba(0, 0, 0, 0.2);
         left: 20px;
         top: 120px;
         line-height: 24px;
@@ -50,16 +50,25 @@ body {
         position: absolute;
         z-index: 2;
         color: #fff;
-        top: 70px;
-        left: 200px;
+        top: 60px;
+        left: 178px;
+        background-color: rgba(0, 0, 0, 0.2);
+        width: 190px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
 
       }
       .countDown {
         color:#fff;
         position: absolute;
-        top:120px;
-        left:200px;
-        width: 200px;
+        top: 110px;
+        left: 178px;
+        width: 190px;
+        height: 50px;
+        background-color: rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding-top: 14px;
         .times {
           display: inline-block;
           width: 28px;
@@ -72,8 +81,8 @@ body {
           height: 40px;
           background-position: -302px 0;
           position: absolute;
-          top :0px;
-          left :60px;
+          top : 10px;
+          left :90px;
         }
         .sec {
           margin-left: 20px;
@@ -285,7 +294,6 @@ body {
       height: 687px;
       background-image: url('../img/bg-table.png');
       position: relative;
-      z-index:auto;
       .dice-sheet {
         position: relative;
         top:114px;
@@ -297,7 +305,6 @@ body {
           position: absolute;
           display: inline-block;
           opacity: 1;
-          z-index: auto;
           .hint {
             position: absolute;
             left: 2px;
@@ -554,25 +561,194 @@ body {
          left:900px;
          visibility: hidden;
        }
-       .bet-info {
-         width: 80px;
-         text-align: center;
-         color:#fff;
-         position: absolute;
-         padding: 4px;
-         background-color: rgba(68, 67, 68, 0.8);
-         font-size: 12px;
-         border-radius: 4px;
-         border: 1px solid #fff;
-         top: 76px;
-         left:900px;
-         visibility: hidden;
-       }
       }
     }
   }
+
+  .confirm-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 130%;
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    .btn-disabled {
+      cursor:not-allowed;
+      opacity: 0.6;
+    }
+    .confirm-window {
+      width: 550px;
+      height: 500px;
+      position: absolute;
+      color: #fff;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      background-color: rgba(46, 46, 46, 1.0);
+      .confirm-title{
+        width: 100%;
+        text-align: center;
+        padding: 10px 0px;
+        background: linear-gradient(to bottom, rgba(37, 37, 37, 1.0),rgba(39, 39, 39, 1.0));
+      }
+      .bet-info {
+        text-align: left;
+        width: 100%;
+        padding-top: 50px;
+        .bet-type {
+          padding-left: 100px;
+          white-space:nowrap;
+        }
+        .bet-issue {
+          white-space:nowrap;
+          padding-left: 100px;
+        }
+        .bet-detail {
+          padding-left: 100px;
+        }
+      }
+      .bet-title {
+        width: 100%;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        color: rgba(178, 126, 8, 1.0);
+        font-size: 16px;
+        white-space:nowrap;
+        .title-idx {
+          text-align: center;
+          width: 50px;
+          display: inline-block;
+        }
+        .title-playType{
+          width: 200px;
+          padding-left: 50px;
+          display: inline-block;
+        }
+        .title-multiple {
+          width: 200px;
+          display: inline-block;
+          position: relative;
+          left: 40px;
+        }
+      }
+      //详细订单
+      .bet-list {
+        width: 400px;
+        height: 60%;
+        background-color: rgba(54, 54, 54, 1.0);
+        overflow: scroll;
+        position: relative;
+        top: 10px;
+        .item-container {
+          white-space:nowrap;
+          .orderitem {
+            background-color: rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            padding: 2px 0px;
+            border-bottom: 1px solid rgba(29, 26, 36, 1.0);
+            border-left: 1px solid rgba(29, 26, 36, 1.0);
+          }
+          font-size: 14px;
+          .item-idx {
+            text-align: center;
+            width: 20px;
+          }
+          .item-playType{
+            width: 180px;
+            padding-left: 20px;
+          }
+          .item-money {
+            width: 180px;
+            text-align: center;
+          }
+        }
+      }
+      //总金额
+      .sumMoney {
+        width: 100%;
+        position: relative;
+        top:14px;
+        .money-text {
+          margin-left: 100px;
+          color: rgba(178, 126, 10, 1.0);
+          margin-right: 10px;
+        }
+      }
+
+      .bet-bottom{
+        height: 30%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .bet-btn {
+          width: 200px;
+          height: 50px;
+          background-color: rgba(178, 126, 8, 1.0);
+          text-align: center;
+          line-height: 50px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
+        .bet-status {
+          width: 200px;
+          height: 50px;
+          background-color: rgba(55, 50, 67, 1.0);
+          text-align: center;
+          line-height: 50px;
+          border-radius: 8px;
+          margin-left: 10px;
+          cursor: not-allowed;
+        }
+
+      }
+    }
+  }
+//mainContainer
 }
 
+.confirm-title{
+  width: 100%;
+  text-align: center;
+  padding: 10px 0px;
+  background: linear-gradient(to bottom, rgba(37, 37, 37, 1.0),rgba(56, 63, 64, 1.0));
+  .confirm-cancel {
+    color: #fff;
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}
+
+.bet-title {
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: rgba(178, 126, 8, 1.0);
+  font-size: 16px;
+  white-space:nowrap;
+  .title-idx {
+    text-align: center;
+    width: 50px;
+    display: inline-block;
+  }
+  .title-playType{
+    width: 200px;
+    padding-left: 50px;
+    display: inline-block;
+  }
+  .title-multiple {
+    width: 200px;
+    display: inline-block;
+    position: relative;
+    left: 40px;
+  }
+}
   i.chip-add{
     background-image: url('../img/chips.png');
     display: inline-block;
@@ -583,6 +759,7 @@ body {
     opacity: 1;
     z-index: 10;
   }
+
 }
 
 .chipMove {
