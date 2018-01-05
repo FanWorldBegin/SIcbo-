@@ -77,7 +77,7 @@ export default class ConfirmWindow extends Component {
           betInfo: '等待投注状态⌛️',
         })
         self.props.conformCss();
-      },2000)
+      },1000)
     }
   }
 
@@ -179,7 +179,7 @@ export default class ConfirmWindow extends Component {
                           {val.palyType}
                         </div>
                         <div className="item-money orderitem">
-                          {val.multiple} 元
+                          {G_F_MoneyFormat(val.multiple)} 元
                         </div>
                       </div>
                     )

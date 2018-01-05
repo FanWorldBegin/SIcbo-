@@ -546,6 +546,14 @@ body {
           color: #fff;
         }
         .button-view {
+          height: 40px;
+          width: 80px;
+          cursor:pointer;
+          display: inline-block;
+          text-align: center;
+          border-radius: 5px;
+          line-height: 40px;
+          margin-left: 10px;
           background-color: rgba(0, 140, 100, 1.0);
           color: #fff;
         }
@@ -723,7 +731,53 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    visibility: hidden;  
+    visibility: hidden;
+    .order-window{
+      width: 650px;
+      height: 500px;
+      position: absolute;
+      color: #fff;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      background-color: rgba(46, 46, 46, 1.0);
+      .order-title{
+        width: 100%;
+        text-align: center;
+        padding: 10px 0px;
+        background: linear-gradient(to bottom, rgba(37, 37, 37, 1.0),rgba(56, 63, 64, 1.0));
+        .order-cancel {
+          color: #fff;
+          position: absolute;
+          right: 20px;
+          font-size: 20px;
+          cursor: pointer;
+        }
+      }
+      .order-info {
+        text-align: left;
+        width: 100%;
+        padding-top: 50px;
+        .order-type {
+          padding-left: 100px;
+          white-space:nowrap;
+        }
+        .order-detail {
+          padding-left: 100px;
+        }
+      }
+
+      .order-list {
+        width: 560px;
+        height: 60%;
+        background-color: rgba(54, 54, 54, 1.0);
+        overflow: scroll;
+        position: relative;
+        top: 10px;
+        //订单详情
+      }
+    }
   }
 //mainContainer
 }
@@ -766,6 +820,47 @@ body {
     left: 40px;
   }
 }
+.order-list {
+  width: 560px;
+  height: 60%;
+  background-color: rgba(54, 54, 54, 1.0);
+  overflow: scroll;
+  position: relative;
+  top: 10px;
+}
+//订单详情
+.item-container {
+  white-space:nowrap;
+  .orderitem {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    padding: 4px 0px;
+    border-bottom: 1px solid rgba(29, 26, 36, 1.0);
+    border-left: 1px solid rgba(29, 26, 36, 1.0);
+    font-size: 12px;
+  }
+  .item-idx {
+    width: 30px;
+    text-align: center;
+  }
+  .item-issue {
+    width: 150px;
+    padding-left: 20px;
+  }
+  .item-type {
+    width: 110px;
+    padding-left: 20px;
+  }
+  .item-money {
+    width: 120px;
+    padding-left: 20px;
+  }
+  .item-state {
+    width: 100px;
+    text-align: center;
+  }
+}
+
   i.chip-add{
     background-image: url('../img/chips.png');
     display: inline-block;

@@ -55,7 +55,7 @@ export default class ChipGroup extends Component {
           <div className="bet-tip">请先选择筹码并投注</div>
           <div className="ui-button button-revocation btn-disabled btn-2">撤销</div>
           <div className="ui-button button-clear btn-disabled btn-3">清空</div>
-        <div className="ui-button button-view  btn-4">订单</div>
+          <div className=" button-view  btn-4">订单</div>
         </div>
       </footer>
 		)

@@ -24,28 +24,12 @@ export default class dicePanel extends Component {
   }
  codeQuery(e){
    //console.log('dfdsffsfsdfs');
-   console.log(e);
+   //console.log(e);
  }
   componentDidMount() {
     var self = this;
     this.getHistory();
-    // var issuQuest = setInterval(function(){
-    //   if(self.state.history.length){
-    //     self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
-    //     self.props.pickerAction.queryOpenCode('', this.codeQuery,20)
-    //     self.setState({
-    //       issue : self.props.lotTimerInfo.nextIssue,
-    //       countDown : self.props.lotTimerInfo.leftSeconds,
-    //       //countDown: 3,
-    //     })
-    //
-    //     window.clearInterval(issuQuest);
-    //   }
-    // },1000)
     this.getCountDownTime();
-    // setTimeout(function(){
-    //   self.props.pickerActions.queryOrderReacords(self.props.clientOrders.LottType, ()=>{console.log('s');})
-    // },1000)
 
   }
 
@@ -95,9 +79,12 @@ export default class dicePanel extends Component {
         issue
       });
     },1000)
-    self.questNumber = setInterval(function(){
-      self.getNewNumber();
-    }, 2000)
+    //查询新的开奖号码
+    setTimeout(function(){
+      self.questNumber = setInterval(function(){
+        self.getNewNumber();
+      }, 2000)
+    },2000)
   }
   //返回历史记录
   getHistoryCallBack(){
@@ -141,13 +128,10 @@ export default class dicePanel extends Component {
          this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
          var openCodeList = self.props.openCodesInfo;  //历史记录列表
          self.setState({
-           issue : self.props.selectedIssue,
+           issue : self.props.nextIssue,
          })
          var openingIssue = self.props.lotTimerInfo.openingIssue; //当前期号
          var lastIssue = self.props.openCodesInfo[0].Issue; //上一期期号
-         // console.log('openingIssue：' + openingIssue);
-         // console.log('openCodesInfo[0].issue：' + lastIssue);
-
         // 发生变化更新
          if(openingIssue == lastIssue){
            var openCodes = self.props.openCodesInfo[0].Code;
@@ -184,21 +168,20 @@ export default class dicePanel extends Component {
     },30000);
   }
 
-  lotteryDrawCss(arr = [4,5,6]) {
+  lotteryDrawCss(arr = [6,6,6]) {
     self = this;
     var glass = document.getElementsByClassName('dice-panel')[0].getElementsByClassName('glass')[0];
     document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='none';
     var RegExp =/[1-6]/;
     var resArr=[];  //记录开奖号码
     var arr = arr; //开奖号码
-      var uiBtn = document.getElementsByClassName('ui-button');
-      for(var i=0; i<uiBtn.length; i++) {
-        uiBtn[i].classList.add('btn-disabled')
-      }
+      // var uiBtn = document.getElementsByClassName('ui-button');
+      // for(var i=0; i<uiBtn.length; i++) {
+      //   uiBtn[i].classList.add('btn-disabled')
+      // }
       var dices =  glass.getElementsByTagName('i');
       //console.log(typeof dices);
       for(let i=0; i<dices.length; i++) {
-        console.log('i');
         dices[i].setAttribute('class','dice dice-' + Math.ceil(Math.random()*6) + ' dice-animation');
         dices[i].style.left = (i*52)+'px';
         setTimeout(function() {
@@ -232,95 +215,11 @@ export default class dicePanel extends Component {
             for(var i=0; i< winIndex.length; i++) {
               betType.getElementsByClassName('dice-sheet-' + winIndex[i])[0].style.visibility='hidden';
             }
-          // //  重置桌面计算奖金
-          //   self.settleAccount(winIndex);
             document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='auto';
-          },2000)
+          },1000)
 
       },1000)
   }
-
-  /**
-   * [settleAccount 中奖后奖金分配，筹码重置]
-   * @param  {[type]} winIndex [中奖索引]
-   * @return {[type]}          [description]
-   */
-    settleAccount(winIndex){
-      var tipMoney = 0, sumMoney = 0, priceMoney = 0;
-      var winWidth = document.body.clientWidth/2;
-      var diceSheet = document.getElementsByClassName('dice-sheet')[0];
-      var chips = diceSheet.getElementsByClassName('chip');
-
-      for(var i=chips.length - 1; i>=0; i--) {
-        chips[i].remove();
-      }
-
-      var tips = document.getElementsByClassName('dice-sheet')[0].getElementsByClassName('tip');
-      for(var i=0; i<tips.length; i++){
-        tips[i].getElementsByClassName('text')[0].innerHTML='0.00'
-      }
-      this.setState({
-        dataCountAmount : '0.00',
-      });
-      var chipRecordArr = this.props.chipRecordArr;
-      //console.log(this.state.dataCountAmount);
-      for(var i=0; i<chipRecordArr.length; i++){
-        var chip = this.createChip(chipRecordArr[i]);
-        for(var j=0; j<winIndex.length; j++) {
-          if(winIndex[j] == chipRecordArr[i].index){ //中奖号码index 与投注信息符合(赢)
-            chip.className = "chip chip-add win";
-            tipMoney = Number(chipRecordArr[i].chipMoney);
-            priceMoney = calculate.accMul(tipMoney, Data[winIndex[j]].property.odds);
-            sumMoney += calculate.accAdd(tipMoney, Number(priceMoney)); //当次可收回筹码
-            break; // 当前投注记录与中奖数组中某一数据相匹配
-          }else {
-            chip.className = "chip chip-add lose";
-          }
-        }
-
-        //跳出循环到这里
-        document.body.appendChild(chip);
-        var chipGroup = document.getElementById('bottom').getElementsByTagName('i');
-        var targetChip = this.getDomByAttr(chipGroup,'data-money',chipRecordArr[i].chipMoney)[0];
-        var targetLeft =  targetChip.getBoundingClientRect().left;
-        var targetTop = targetChip.getBoundingClientRect().top;
-        if(chip.className == 'chip chip-add win') {
-          var styleSheet=document.styleSheets[2];
-          styleSheet.deleteRule(102);
-          styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,102);
-          chip.setAttribute('class', 'chip chip-add chipMove');
-          var chips = document.getElementsByClassName('chipMove');
-          setTimeout(function(){
-            for(var i=chips.length-1; i>=0; i--) {
-              chips[i].remove();
-            }
-          },200);
-        }else if(chip.className == 'chip chip-add lose'){
-          var styleSheet=document.styleSheets[2];
-          styleSheet.deleteRule(104);
-          styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,104);
-          chip.setAttribute('class', 'chip chip-add chipMoveTop');
-          var chipLose = document.getElementsByClassName('chipMoveTop');
-          setTimeout(function(){
-            for(var i=chipLose.length-1; i>=0; i--) {
-            chipLose[i].remove();
-            }
-          },200);
-        }
-      }
-
-      var {dataUserBalance} = this.state;
-      var balanceMoney = calculate.accAdd(G_F_MoneyFormat(dataUserBalance), sumMoney);
-      this.setState ({
-        dataUserBalance: balanceMoney+'.00',
-      })
-      chipRecordArr.length = 0;
-      var chipArr = this.props.chipArr;
-      //清空各个区块筹码个数
-      for(let i = 0; i < chipArr.length; i++) {
-        chipArr[i].length = 0;
-      }
-    }
 
   render() {
     var {issue, countDown, isTimeout} = this.state;

@@ -176,8 +176,8 @@ class GameLogicLayout extends PickerGameAppClass {
               var styleSheet=document.styleSheets[2];
               // console.log('styleSheet');
               // console.log(styleSheet);
-              styleSheet.deleteRule(130);
-              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,130);
+              styleSheet.deleteRule(147);
+              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,147);
               chipAdd.setAttribute('class', 'chip chip-add chipMove');
               setTimeout(function(){
                 chipAdd.parentNode.removeChild(chipAdd);
@@ -227,7 +227,7 @@ class GameLogicLayout extends PickerGameAppClass {
                      [{"locate":orders.locate, "numberUnit":orders.numberUnit, "display":orders.display}],  //传入的值
                      playTypeDetails.rule,   //玩法规则
                      {},    //忽略
-                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01304】
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01474】
                    );
                  } else if (orders.type == 'INPUT') {
                    // Input单式
@@ -236,7 +236,7 @@ class GameLogicLayout extends PickerGameAppClass {
                      [orders.numberUnit],  //传入的值
                      playTypeDetails.rule,   //玩法规则
                      {},    //忽略
-                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01304】
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01474】
                    );
                  }
                 //确认选号
@@ -271,8 +271,8 @@ class GameLogicLayout extends PickerGameAppClass {
                 remChip.style.cssText='left:'+x+'px;top:'+y+'px;background-position:'+targetBackpo+';';
                 document.body.appendChild(remChip); // 先创建一个筹码添加到body里面，然后动画飞到创建位置
                 var styleSheet=document.styleSheets[2];
-                styleSheet.deleteRule(130);
-                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,130);
+                styleSheet.deleteRule(147);
+                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,147);
                 remChip.setAttribute('class', 'chip chip-add chipMove');
                 setTimeout(function(){
                   remChip.parentNode.removeChild(remChip);
@@ -522,8 +522,8 @@ class GameLogicLayout extends PickerGameAppClass {
     var targetTop = targetChip.getBoundingClientRect().top;
 
     var styleSheet=document.styleSheets[2];
-    styleSheet.deleteRule(130);
-    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,130);
+    styleSheet.deleteRule(147);
+    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,147);
     chipRemove.setAttribute('class', 'chip chip-add chipMove');
     setTimeout(function(){
       chipRemove.remove();
@@ -657,8 +657,8 @@ class GameLogicLayout extends PickerGameAppClass {
             chip.className = "chip chip-add";
             document.body.appendChild(chip);
             var styleSheet=document.styleSheets[2];
-            styleSheet.deleteRule(132);
-            styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,132);
+            styleSheet.deleteRule(149);
+            styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,149);
             chip.setAttribute('class', 'chip chip-add chipMoveTop');
             var chip = document.getElementsByClassName('chipMoveTop');
             setTimeout(function(){
@@ -673,7 +673,7 @@ class GameLogicLayout extends PickerGameAppClass {
             chipArr[i].length = 0;
           }
           document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='auto';
-      },1000)
+      },300)
 
   }
   // componentWillReceiveProps(nextProps) {
@@ -855,8 +855,8 @@ class GameLogicLayout extends PickerGameAppClass {
 //       var targetTop = targetChip.getBoundingClientRect().top;
 //       if(chip.className == 'chip chip-add win') {
 //         var styleSheet=document.styleSheets[2];
-//         styleSheet.deleteRule(130);
-//         styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,130);
+//         styleSheet.deleteRule(147);
+//         styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,147);
 //         chip.setAttribute('class', 'chip chip-add chipMove');
 //         var chips = document.getElementsByClassName('chipMove');
 //         setTimeout(function(){
@@ -866,8 +866,8 @@ class GameLogicLayout extends PickerGameAppClass {
 //         },200);
 //       }else if(chip.className == 'chip chip-add lose'){
 //         var styleSheet=document.styleSheets[2];
-//         styleSheet.deleteRule(132);
-//         styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,132);
+//         styleSheet.deleteRule(149);
+//         styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,149);
 //         chip.setAttribute('class', 'chip chip-add chipMoveTop');
 //         var chipLose = document.getElementsByClassName('chipMoveTop');
 //         setTimeout(function(){
@@ -988,7 +988,7 @@ class GameLogicLayout extends PickerGameAppClass {
            />
         </div>
         <ConfirmWindow transactionList={transactionList} selectedIssue={selectedIssue} orderActions={orderActions} conformCss={this.conformCss} dataCountAmount={dataCountAmount} transactionStatus={transactionStatus} pickerActions={pickerActions}/>
-        {/* <OrderList pickerActions={pickerActions}></OrderList> */}
+        <OrderList pickerActions={pickerActions} txHistoryList={txHistoryList} clientOrders={clientOrders}></OrderList>
       </div>
 		)
 	}
