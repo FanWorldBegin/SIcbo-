@@ -30,53 +30,56 @@ export default class ConfirmWindow extends Component {
 
   }
   checkOrderList() {
+    var self = this;
       document.getElementsByClassName('order-container')[0].style.visibility = 'visible';
-      this.props.pickerActions.queryOrderReacords(this.props.clientOrders.LottType, ()=>{})
-      console.log(this.props.txHistoryList);
-      var {txHistoryList} = this.props;
-      var orderList = []
-      txHistoryList.map((val, idx) => {
-        var listItem ={Issue:'', PalyType: '', RealCost:'', Status:''}
-        if(val.PlayType == 'K3_HZDXDS'){
-          switch(val.OriginalRecord){
-            case '0':
-            listItem.PlayType = '和值: 大'; break;
-            case '1':
-            listItem.PlayType = '和值: 小'; break;
-            case '2':
-            listItem.PlayType = '和值: 单'; break;
-            case '3':
-            listItem.PlayType = '和值: 双'; break;
-          }
-        }   else if(val.PlayType == 'K2T_2TFX') {
-            listItem.PlayType = '二同号复选: ' + val.OriginalRecord;
-            } else if(val.PlayType == 'K3T_3T') {
-              listItem.PlayType = '三同号单选: ' + val.OriginalRecord;
-            } else if(val.PlayType == 'K3T_3TTX') {
-              listItem.PlayType = '三同号通选: ' + val.OriginalRecord;
-            } else if(val.PlayType == 'K3_HZ') {
-              listItem.PlayType= '和值: ' + val.OriginalRecord;
-            } else if (val.PlayType == 'K2BT_2BTDS'){
-              listItem.PlayType = '二不同单式: ' + val.OriginalRecord;
+      this.props.pickerActions.queryOrderReacords(this.props.clientOrders.LottType, ()=>{
+        console.log(self.props.txHistoryList);
+        var {txHistoryList} = self.props;
+        var orderList = []
+        txHistoryList.map((val, idx) => {
+          var listItem ={Issue:'', PalyType: '', RealCost:'', Status:''}
+          if(val.PlayType == 'K3_HZDXDS'){
+            switch(val.OriginalRecord){
+              case '0':
+              listItem.PlayType = '和值: 大'; break;
+              case '1':
+              listItem.PlayType = '和值: 小'; break;
+              case '2':
+              listItem.PlayType = '和值: 单'; break;
+              case '3':
+              listItem.PlayType = '和值: 双'; break;
             }
-            switch(val.Status) {
-              case 'wait' :
-              listItem.Status = '未开奖'; break;
-              case 'none' :
-              listItem.Status = '未中奖'; break;
-              case 'win:' :
-              listItem.Status = '已中奖'; break;
+          }   else if(val.PlayType == 'K2T_2TFX') {
+              listItem.PlayType = '二同号复选: ' + val.OriginalRecord;
+              } else if(val.PlayType == 'K3T_3T') {
+                listItem.PlayType = '三同号单选: ' + val.OriginalRecord;
+              } else if(val.PlayType == 'K3T_3TTX') {
+                listItem.PlayType = '三同号通选: ' + val.OriginalRecord;
+              } else if(val.PlayType == 'K3_HZ') {
+                listItem.PlayType= '和值: ' + val.OriginalRecord;
+              } else if (val.PlayType == 'K2BT_2BTDS'){
+                listItem.PlayType = '二不同单式: ' + val.OriginalRecord;
+              }
+              switch(val.Status) {
+                case 'wait' :
+                listItem.Status = '未开奖'; break;
+                case 'none' :
+                listItem.Status = '未中奖'; break;
+                case 'win' :
+                listItem.Status = '已中奖'; break;
 
-            }
+              }
 
-            listItem.RealCost = G_F_MoneyFormat(val.RealCost);
-            listItem.Issue = val.Issue;
-            orderList.push(listItem)
+              listItem.RealCost = G_F_MoneyFormat(val.RealCost);
+              listItem.Issue = val.Issue;
+              orderList.push(listItem)
+        })
+
+        self.setState({
+          orderList: orderList,
+        })
       })
 
-      this.setState({
-        orderList: orderList,
-      })
   }
 
 
