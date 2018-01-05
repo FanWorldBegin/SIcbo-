@@ -79,7 +79,7 @@ export default class dicePanel extends Component {
         issue
       });
     },1000)
-    //查询新的开奖号码
+    //查询
     setTimeout(function(){
       self.questNumber = setInterval(function(){
         self.getNewNumber();
@@ -128,7 +128,7 @@ export default class dicePanel extends Component {
          this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
          var openCodeList = self.props.openCodesInfo;  //历史记录列表
          self.setState({
-           issue : self.props.nextIssue,
+           issue : self.props.lotTimerInfo.nextIssue,
          })
          var openingIssue = self.props.lotTimerInfo.openingIssue; //当前期号
          var lastIssue = self.props.openCodesInfo[0].Issue; //上一期期号
