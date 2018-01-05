@@ -93,7 +93,6 @@ export default class ConfirmWindow extends Component {
       console.log(issue);
       const {transactionList, selectedIssue, orderActions} = this.props;
       var betList = [];
-      console.log(transactionList);
       transactionList.map((val, idx) => {
         var listItem = {palyType:'', multiple:''};
         if(val.playType == 'K3_HZDXDS'){
@@ -143,13 +142,6 @@ export default class ConfirmWindow extends Component {
          //console.log(pickerActions.changeRetRate(0));
       }
 
-/**
- * [betIssue 计算奖期]
- * @return {[type]} [description]
- */
-      betIssue(){
-
-      }
   render() {
     var {betList, betInfo} = this.state;
     var {dataCountAmount} = this.props;
@@ -164,11 +156,6 @@ export default class ConfirmWindow extends Component {
               <div className="bet-issue">期号：<span className="confirm-issue"></span>期</div>
               <div className="bet-detail">详情：</div>
             </div>
-            {/* <div className="bet-title">
-              <div className="title-idx ">序号</div>
-              <div className="title-playType ">所选玩法</div>
-              <div className="title-multiple">下注倍数</div>
-            </div> */}
             <div className="bet-list">
               {
                   betList.length ?

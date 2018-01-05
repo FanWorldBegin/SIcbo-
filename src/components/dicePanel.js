@@ -22,15 +22,12 @@ export default class dicePanel extends Component {
     this.getCountDownTime = this.getCountDownTime.bind(this);
     this.getNewNumber = this.getNewNumber.bind(this);
   }
- codeQuery(e){
-   //console.log('dfdsffsfsdfs');
-   //console.log(e);
- }
+  // 查询开奖数字回调函数
+ codeQuery(){ }
   componentDidMount() {
     var self = this;
     this.getHistory();
     this.getCountDownTime();
-
   }
 
   /**
@@ -54,6 +51,7 @@ export default class dicePanel extends Component {
               issue : self.props.lotTimerInfo.nextIssue,
               countDown : self.props.lotTimerInfo.leftSeconds,
             });
+            //获取到则清除定时器
             if(openCodeList.length){
               //监听倒计时
               self.questNumber = setInterval(function(){
@@ -79,7 +77,7 @@ export default class dicePanel extends Component {
         issue
       });
     },1000)
-    //查询
+    //每2秒查询一次是否已经开奖
     setTimeout(function(){
       self.questNumber = setInterval(function(){
         self.getNewNumber();
@@ -121,37 +119,44 @@ export default class dicePanel extends Component {
      return rest;
 
    }
-
+/**
+ * [getNewNumber 获取新的开奖号码]
+ * @return {[type]} [description]
+ */
    getNewNumber(){
      var self = this;
-         self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
-         this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
-         var openCodeList = self.props.openCodesInfo;  //历史记录列表
-         self.setState({
-           issue : self.props.lotTimerInfo.nextIssue,
+     self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
+     this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
+     var openCodeList = self.props.openCodesInfo;  //历史记录列表
+     self.setState({
+       issue : self.props.lotTimerInfo.nextIssue,
+     })
+     var openingIssue = self.props.lotTimerInfo.openingIssue; //当前期号
+     var lastIssue = self.props.openCodesInfo[0].Issue; //上一期期号
+    // 发生发现已经开奖则清除定时器
+     if(openingIssue == lastIssue){
+       var openCodes = self.props.openCodesInfo[0].Code;
+       var arr = openCodes.split('');
+       // console.log('开奖号码');
+       // console.log(arr);
+       self.lotteryDrawCss(arr);
+         //更新历史记录
+         var newList = [];
+         openCodeList.map((item, index) => {
+           var codeArr = item.Code.split('');
+           var defineArr = self.defineCodeArr(codeArr);
+           newList.push({code: codeArr, time: item.Issue, sum: defineArr.sum, bigSmall: defineArr.bigSmall, oddEven:defineArr.oddEven});
          })
-         var openingIssue = self.props.lotTimerInfo.openingIssue; //当前期号
-         var lastIssue = self.props.openCodesInfo[0].Issue; //上一期期号
-        // 发生变化更新
-         if(openingIssue == lastIssue){
-           var openCodes = self.props.openCodesInfo[0].Code;
-           var arr = openCodes.split('');
-           console.log('开奖号码');
-           console.log(arr);
-           self.lotteryDrawCss(arr);
-             //更新历史记录
-             var newList = [];
-             openCodeList.map((item, index) => {
-               var codeArr = item.Code.split('');
-               var defineArr = self.defineCodeArr(codeArr);
-               newList.push({code: codeArr, time: item.Issue, sum: defineArr.sum, bigSmall: defineArr.bigSmall, oddEven:defineArr.oddEven});
-             })
-             self.setState({
-               history: newList,
-             },() => {});
-             window.clearInterval(this.questNumber)
-         }
+         self.setState({
+           history: newList,
+         },() => {});
+         window.clearInterval(this.questNumber)
+     }
    }
+   /**
+    * [getCountDownTime 倒计时]
+    * @return {[type]} [description]
+    */
   getCountDownTime() {
     var self =this;
     setInterval(function(){
@@ -168,6 +173,9 @@ export default class dicePanel extends Component {
     },30000);
   }
 
+  /**
+   * 开奖动画
+   */
   lotteryDrawCss(arr = [6,6,6]) {
     self = this;
     var glass = document.getElementsByClassName('dice-panel')[0].getElementsByClassName('glass')[0];
