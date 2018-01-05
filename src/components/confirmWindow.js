@@ -30,6 +30,7 @@ export default class ConfirmWindow extends Component {
     cancel.onclick = function() {
       document.getElementsByClassName('dice-sheet')[0].style.pointerEvents='auto';
       document.getElementsByClassName('confirm-container')[0].style.visibility = 'hidden';
+      document.getElementsByClassName('bet-btn')[0].classList.remove('btn-disabled');
       self.setState({
         betInfo: '等待投注状态⌛️',
       })
