@@ -31,7 +31,7 @@ export default class ChipTable extends Component {
               <div className={`bet-container bet-container-${index}`} key={index}  style={value.style} onMouseDown={e=>{onBet(e)}}>
                 <span className="hint">?
                   <div className="hint-box">{
-                      window.GAMEPLAY_CONFIGS.LottPlayData[typename].Description}</div>
+                      window.GAMEPLAY_CONFIGS.LottPlayData[typename].Description? window.GAMEPLAY_CONFIGS.LottPlayData[typename].Description : '' }</div>
                 </span>
 
                  <span className="tip hove-show">
