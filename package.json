@@ -1,6 +1,7 @@
 {
   "name": "react-app-seed",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "scripts": {
     "start": "node scripts/start.js",

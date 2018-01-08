@@ -1,12 +1,12 @@
 body {
   width: 100%;
   height: auto;
-  background-image: url('/images/background.jpg');
+  background-image: url('./images/background.jpg');
   background-size: 100% ;
   .log-jump {
     height: 100%;
     width: 100%;
-    background-image: url('/images/background.jpg');
+    background-image: url('./images/background.jpg');
     background-size: cover;
     position: absolute;
     z-index: 1;
@@ -45,7 +45,7 @@ body {
     .dice-top {
       width: 996px;
       height: 220px;
-      background-image: url('/images/top-panel2.png');
+      background-image: url('./images/top-panel2.png');
       position: relative;
       top: -30px;
       .logo {
@@ -103,7 +103,7 @@ body {
           display: inline-block;
           width: 28px;
           height: 40px;
-          background-image: url('/images/countDown.png');
+          background-image: url('./images/countDown.png');
         }
         .colon {
           display: inline-block;
@@ -159,7 +159,7 @@ body {
           width: 43px;
           height: 50px;
           position: absolute;
-          background-image: url('/images/dice.png');
+          background-image: url('./images/dice.png');
           background-repeat: no-repeat;
           margin-left: 10px;
         }
@@ -258,7 +258,7 @@ body {
                    display: inline-block;
                    width: 16px;
                    height: 16px;
-                   background: url('/images/dice-small.png');
+                   background: url('./images/dice-small.png');
                    margin-left: 2px;
                  }
                  .dice-number-1 {
@@ -322,7 +322,7 @@ body {
       top: -20px;
       width: 1483px;
       height: 687px;
-      background-image: url('/images/bg-table.png');
+      background-image: url('./images/bg-table.png');
       position: relative;
       .dice-sheet {
         position: relative;
@@ -403,7 +403,7 @@ body {
             visibility: hidden;
           }
           .chip-add {
-            background-image: url('/images/chips.png');
+            background-image: url('./images/chips.png');
             display: inline-block;
             width: 40px;
             height:40px;
@@ -437,7 +437,7 @@ body {
           cursor:pointer;
           vertical-align:center;
           opacity: 0.6;
-          background-image: url('/images/chips.png');
+          background-image: url('./images/chips.png');
         }
         .chip-2 {
           background-position: -40px 0px;
@@ -892,7 +892,7 @@ body {
 }
 
   i.chip-add{
-    background-image: url('./chips.png');
+    background-image: url('./images/chips.png');
     display: inline-block;
     width: 40px;
     height:40px;
