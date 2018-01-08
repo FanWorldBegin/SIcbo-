@@ -41,10 +41,10 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
 // However, our output is structured with css, js and media folders.
 // To have this structure working with relative paths, we have to use custom options.
-// const extractTextPluginOptions = shouldUseRelativeAssetPaths
-//   ? // Making sure that the publicPath goes back to to build folder.
-//     { publicPath: Array(cssFilename.split('/').length).join('../') }
-//   : {};
+const extractTextPluginOptions = shouldUseRelativeAssetPaths
+  ? // Making sure that the publicPath goes back to to build folder.
+    { publicPath: Array(cssFilename.split('/').length).join('../') }
+  : {};
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -61,16 +61,16 @@ module.exports = {
     main: [
       require.resolve('./polyfills'), paths.appIndexJs
     ],
-    polyfill: [
-      path.resolve(__dirname, '../public/js/polyfill.js')
-    ],
-    basicHelper: [
-      'babel-polyfill',
-      path.resolve(__dirname, '../src/lib/global.helper.js'),
-    ],
-    'navigation.bundle': [
-      path.resolve(__dirname, '../src/picker.lib/lottConfig.js'),
-    ],
+    // polyfill: [
+    //   path.resolve(__dirname, '../public/js/polyfill.js')
+    // ],
+    // basicHelper: [
+    //   'babel-polyfill',
+    //   path.resolve(__dirname, '../src/lib/global.helper.js'),
+    // ],
+    // 'navigation.bundle': [
+    //   path.resolve(__dirname, '../src/picker.lib/lottConfig.js'),
+    // ],
     // 'main.style': [
     //   path.resolve(__dirname, 'src/app.scss')
     // ],
@@ -180,49 +180,61 @@ module.exports = {
           // tags. If you use code splitting, however, any async bundles will still
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
-          // {
-          //   test: /\.css$|\.scss$/,
-          //   loader: ExtractTextPlugin.extract(
-          //     Object.assign(
-          //       {
-          //         fallback: require.resolve('style-loader'),
-          //         use: [
-          //           {
-          //             loader: require.resolve('css-loader'),
-          //             options: {
-          //               importLoaders: 1,
-          //               minimize: true,
-          //               sourceMap: shouldUseSourceMap,
-          //             },
-          //           },
-          //           {
-          //             loader: require.resolve('postcss-loader'),
-          //             options: {
-          //               // Necessary for external CSS imports to work
-          //               // https://github.com/facebookincubator/create-react-app/issues/2677
-          //               ident: 'postcss',
-          //               plugins: () => [
-          //                 require('postcss-flexbugs-fixes'),
-          //                 autoprefixer({
-          //                   browsers: [
-          //                     '>1%',
-          //                     'last 4 versions',
-          //                     'Firefox ESR',
-          //                     'not ie < 9', // React doesn't support IE8 anyway
-          //                   ],
-          //                   flexbox: 'no-2009',
-          //                 }),
-          //               ],
-          //             },
-          //           },
-          //           require.resolve('sass-loader'),
-          //         ],
-          //       },
-          //       extractTextPluginOptions
-          //     )
-          //   ),
-          //   // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-          // },
+          {
+            test: /\.css$|\.scss$/,
+            loader: [
+              'style-loader',
+              'css-loader',
+              // 'postcss-loader',
+              'sass-loader',
+            ]
+            // loader: [
+            //   require.resolve('style-loader'),
+            //   require.resolve('css-loader'),
+            //   require.resolve('postcss-loader'),
+            //   require.resolve('sass-loader'),
+            // ]
+            // loader: ExtractTextPlugin.extract(
+            //   Object.assign(
+            //     {
+            //       fallback: require.resolve('style-loader'),
+            //       use: [
+            //         {
+            //           loader: require.resolve('css-loader'),
+            //           options: {
+            //             importLoaders: 1,
+            //             minimize: true,
+            //             sourceMap: shouldUseSourceMap,
+            //           },
+            //         },
+            //         {
+            //           loader: require.resolve('postcss-loader'),
+            //           options: {
+            //             // Necessary for external CSS imports to work
+            //             // https://github.com/facebookincubator/create-react-app/issues/2677
+            //             ident: 'postcss',
+            //             plugins: () => [
+            //               require('postcss-flexbugs-fixes'),
+            //               autoprefixer({
+            //                 browsers: [
+            //                   '>1%',
+            //                   'last 4 versions',
+            //                   'Firefox ESR',
+            //                   'not ie < 9', // React doesn't support IE8 anyway
+            //                 ],
+            //                 flexbox: 'no-2009',
+            //               }),
+            //             ],
+            //           },
+            //         },
+            //         require.resolve('sass-loader'),
+            //       ],
+            //     },
+            //   // extractTextPluginOptions
+            //   )
+            // ),
+            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader don't uses a "test" so it will catch all modules
@@ -245,6 +257,7 @@ module.exports = {
     ],
   },
   plugins: [
+    // new ExtractTextPlugin("styles.css"),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -277,6 +290,7 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
+        drop_console: true,
         // Disabled because of an issue with Uglify breaking seemingly valid code:
         // https://github.com/facebookincubator/create-react-app/issues/2376
         // Pending further investigation:

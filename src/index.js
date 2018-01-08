@@ -17,7 +17,9 @@ import './scss/layout.scss';
 //     )
 //   }
 // }
+window.Bootstrap = function() {
 
-ReactDOM.render((
-  <App/>
-), document.getElementById('Main'));
+  ReactDOM.render((
+    <App/>
+  ), document.getElementById('Main'));
+}

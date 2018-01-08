@@ -21,10 +21,10 @@ export default class LotGameApp extends Component {
       gameplayData,
       sectionId
     } = this.props;
-    console.log(this.props);
 
     // const {collections} = PickerStores;
     const store = (PickerStores.GetAllPickerStores())[sectionId]; //获取对应store
+    console.log(sectionId, store);
     return (
       <Provider store={store}>
         <GameLogic

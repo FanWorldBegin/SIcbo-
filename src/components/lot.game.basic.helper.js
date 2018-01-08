@@ -224,12 +224,12 @@ export class PickerGameAppClass extends Component {
   setPollLotInfo(nextInfo) {
     const {gameplayData} = this.props;
     const {isOpening, nextIssue, isActive = true} = nextInfo
-    window.SetActiveLotData({
-      lotCode: gameplayData.code,
-      isOpening,
-      nextIssue,
-      isActive
-    });
+    // window.SetActiveLotData({
+    //   lotCode: gameplayData.code,
+    //   isOpening,
+    //   nextIssue,
+    //   isActive
+    // });
   }
   onAward(lotCode) {
     const {pickerActions} = this.props;

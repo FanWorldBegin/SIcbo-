@@ -82,15 +82,19 @@
       // window.OnReceiveNewRecord
     </script>
     <script>
+    /**
+     * 正是环境以下代码都可以不需要
+     */
       // function()
       // https://vg00.net/public-js/platform.config.js
       window.LoadScript('public-js/platform.config.js', function() {
-        console.log(window.GAMEPLAY_CONFIGS)
-        G_O_EventEmitter.emit('RESOURCE_READY');
+        // console.log(window.GAMEPLAY_CONFIGS)
+        // G_O_EventEmitter.emit('RESOURCE_READY');
+        initGame();
       });
       window.LoadScript('public-js/client.mapper.js', function(res) {
         window.NAMES_MAPPER = KEY_MAPPERS;
-        initGame();
+        // initGame();
       });
       // window.LoadScript('static/js/navigation.bundle.js', function() {});
       // window.LoadScript('static/js/basicHelper.js');
@@ -99,6 +103,7 @@
         window.onRequest.gameGate(postData, function(res) {
           window.USER_INFO = res.Data.User;//用户信息
           var username = res.Data.User.UserName;
+          console.log(window.USER_INFO);
           var sessId = res.Data.SessId;
 
 
@@ -121,7 +126,8 @@
           window.onRequest.setPostHeader(commonHeader);
 
           window.G_O_EventEmitter.emit('LOGIN_SUCCESS');
-          window.OnLoginSuccess();  //在loginin.selector中定义
+          window.Bootstrap();
+        //  window.OnLoginSuccess();  //在loginin.selector中定义
         })
       }
 

@@ -1,5 +1,5 @@
 /**
- * [state 上侧面板，显示骰盅, 奖期倒计时，开奖记录]
+ * [state 上侧面板，显示骰盅, 奖期倒计时，开奖记录，查询开奖号码，开奖动画]
  * @type {Object}
  */
 import React, {Component} from 'react';
@@ -37,8 +37,8 @@ export default class dicePanel extends Component {
     getHistory() {
       var self = this;
       var getHistoryInterval=setInterval(function(){
-            self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
-            self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
+            self.props.timerActions.applySyncTime(self.props.selectedLotType, self.getHistoryCallBack(), true);
+            self.props.pickerActions.queryOpenCode(self.props.selectedLotType, this.codeQuery,20);
             var openCodeList = self.props.openCodesInfo;  //历史记录列表
             var newList = [];
             openCodeList.map((item, index) => {
@@ -56,7 +56,8 @@ export default class dicePanel extends Component {
               //监听倒计时
               self.questNumber = setInterval(function(){
                 self.getNewNumber();
-              }, 2000)
+                console.log('getNewNumber');
+              }, 3000)
               window.clearInterval(getHistoryInterval);
             }
       },1000)
@@ -68,8 +69,8 @@ export default class dicePanel extends Component {
   countDownFinish(){
     var self =this;
     setTimeout(function(){
-      self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
-      self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
+      self.props.timerActions.applySyncTime(self.props.selectedLotType, self.getHistoryCallBack(), true);
+      self.props.pickerActions.queryOpenCode(self.props.selectedLotType, this.codeQuery,20);
       var countDownTime = self.props.lotTimerInfo.leftSeconds;
       var issue = self.props.lotTimerInfo.nextIssue;
       self.setState({
@@ -125,8 +126,8 @@ export default class dicePanel extends Component {
  */
    getNewNumber(){
      var self = this;
-     self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, 'callback', true);
-     this.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery(),20);
+     self.props.timerActions.applySyncTime(self.props.selectedLotType, 'callback', true);
+     this.props.pickerActions.queryOpenCode(self.props.selectedLotType, this.codeQuery(),20);
      var openCodeList = self.props.openCodesInfo;  //历史记录列表
      self.setState({
        issue : self.props.lotTimerInfo.nextIssue,
@@ -161,8 +162,8 @@ export default class dicePanel extends Component {
     var self =this;
     setInterval(function(){
       if(self.props){
-        self.props.timerActions.applySyncTime(self.props.clientOrders.LottType, self.getHistoryCallBack(), true);
-        self.props.pickerActions.queryOpenCode(self.props.clientOrders.LottType, this.codeQuery,20);
+        self.props.timerActions.applySyncTime(self.props.selectedLotType, self.getHistoryCallBack(), true);
+        self.props.pickerActions.queryOpenCode(self.props.selectedLotType, this.codeQuery,20);
         var countDownTime = self.props.lotTimerInfo.leftSeconds;
         var issue = self.props.lotTimerInfo.nextIssue;
         self.setState({

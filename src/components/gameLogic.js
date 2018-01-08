@@ -20,7 +20,6 @@ const {pickerActions, timerActions, orderActions} = PickerActions;
 // import Actions, {PickerActions} from 'matrix-web-components-2.0';
 // console.log(Actions);
 // const {pickerActions, timerActions, orderActions} = PickerActions;
-
 var nowTime=new Date();
 var chipArr=new Array(Data.length); // 创建一个空数组，长度为投注种类长度 52 存放每个投注类型中的筹码数量
 for (var x=0;x < chipArr.length ;x++ ) {  //存放每个投注类型中的筹码数
@@ -35,7 +34,7 @@ var clientOrders = {
   ClientOrderId: "402264641",
   Issue: "20170918-062",
   LottCata: "K3",
-  LottType: window.LOTT_INFO || 'AHK3',
+  LottType: window.LOTT_INFO,
   Multiple: 1,
   OriginalRecord: "1",
   PlayType: "K3T_3T",
@@ -43,7 +42,6 @@ var clientOrders = {
   SelectedRate:0,
   Unit:"yuan",
 }
-
 class GameLogicLayout extends PickerGameAppClass {
   constructor(props) {
     super(props);
@@ -62,7 +60,7 @@ class GameLogicLayout extends PickerGameAppClass {
     this.conformCss=this.conformCss.bind(this);
     this.state = {
       dataCountAmount: '0.00',
-      dataUserBalance: window.USER_INFO.Balance,
+      dataUserBalance: (window.USER_INFO || {}).Balance,
       history: [],
       activeChip: 1,
       betInfo: this.props.transactionStatus,
@@ -176,8 +174,8 @@ class GameLogicLayout extends PickerGameAppClass {
               var styleSheet=document.styleSheets[2];
               // console.log('styleSheet');
               // console.log(styleSheet);
-              styleSheet.deleteRule(147);
-              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,147);
+              styleSheet.deleteRule(151);
+              styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${x}px;top:${y}px}}`,151);
               chipAdd.setAttribute('class', 'chip chip-add chipMove');
               setTimeout(function(){
                 chipAdd.parentNode.removeChild(chipAdd);
@@ -227,7 +225,7 @@ class GameLogicLayout extends PickerGameAppClass {
                      [{"locate":orders.locate, "numberUnit":orders.numberUnit, "display":orders.display}],  //传入的值
                      playTypeDetails.rule,   //玩法规则
                      {},    //忽略
-                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01474】
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01514】
                    );
                  } else if (orders.type == 'INPUT') {
                    // Input单式
@@ -236,7 +234,7 @@ class GameLogicLayout extends PickerGameAppClass {
                      [orders.numberUnit],  //传入的值
                      playTypeDetails.rule,   //玩法规则
                      {},    //忽略
-                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01474】
+                     playTypeDetails.numberRange,  //当前玩法的索引范围【大小单双为一组01514】
                    );
                  }
                 //确认选号
@@ -271,8 +269,8 @@ class GameLogicLayout extends PickerGameAppClass {
                 remChip.style.cssText='left:'+x+'px;top:'+y+'px;background-position:'+targetBackpo+';';
                 document.body.appendChild(remChip); // 先创建一个筹码添加到body里面，然后动画飞到创建位置
                 var styleSheet=document.styleSheets[2];
-                styleSheet.deleteRule(147);
-                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,147);
+                styleSheet.deleteRule(151);
+                styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetL}px;top:${targetT}px}}`,151);
                 remChip.setAttribute('class', 'chip chip-add chipMove');
                 setTimeout(function(){
                   remChip.parentNode.removeChild(remChip);
@@ -416,7 +414,7 @@ class GameLogicLayout extends PickerGameAppClass {
           // }
           var {transactionList} = this.props;
           transactionList.map((val, idx) => {
-            sum += Number(val.multiple)
+            sum += Number(val.multiple)* window.BASE_MUL
           })
           var sumchar = sum + '.00';
           this.setState({
@@ -522,8 +520,8 @@ class GameLogicLayout extends PickerGameAppClass {
     var targetTop = targetChip.getBoundingClientRect().top;
 
     var styleSheet=document.styleSheets[2];
-    styleSheet.deleteRule(147);
-    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,147);
+    styleSheet.deleteRule(151);
+    styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,151);
     chipRemove.setAttribute('class', 'chip chip-add chipMove');
     setTimeout(function(){
       chipRemove.remove();
@@ -657,8 +655,8 @@ class GameLogicLayout extends PickerGameAppClass {
             chip.className = "chip chip-add";
             document.body.appendChild(chip);
             var styleSheet=document.styleSheets[2];
-            styleSheet.deleteRule(149);
-            styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,149);
+            styleSheet.deleteRule(153);
+            styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,153);
             chip.setAttribute('class', 'chip chip-add chipMoveTop');
             var chip = document.getElementsByClassName('chipMoveTop');
             setTimeout(function(){
@@ -855,8 +853,8 @@ class GameLogicLayout extends PickerGameAppClass {
 //       var targetTop = targetChip.getBoundingClientRect().top;
 //       if(chip.className == 'chip chip-add win') {
 //         var styleSheet=document.styleSheets[2];
-//         styleSheet.deleteRule(147);
-//         styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,147);
+//         styleSheet.deleteRule(151);
+//         styleSheet.insertRule(`@keyframes chipAnimation { 100%{left:${targetLeft}px;top:${targetTop}px}}`,151);
 //         chip.setAttribute('class', 'chip chip-add chipMove');
 //         var chips = document.getElementsByClassName('chipMove');
 //         setTimeout(function(){
@@ -866,8 +864,8 @@ class GameLogicLayout extends PickerGameAppClass {
 //         },200);
 //       }else if(chip.className == 'chip chip-add lose'){
 //         var styleSheet=document.styleSheets[2];
-//         styleSheet.deleteRule(149);
-//         styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,149);
+//         styleSheet.deleteRule(153);
+//         styleSheet.insertRule(`@keyframes chipAnimationTop { 100%{left:${winWidth}px;top:${0}px}}`,153);
 //         chip.setAttribute('class', 'chip chip-add chipMoveTop');
 //         var chipLose = document.getElementsByClassName('chipMoveTop');
 //         setTimeout(function(){
@@ -915,22 +913,22 @@ class GameLogicLayout extends PickerGameAppClass {
     var styleSheet=document.styleSheets[2];
     console.log('styleSheet');
     console.log(styleSheet);
-    //取消右键菜单
-    //oncontextmenu=function(){return false}
+  //  取消右键菜单
+    oncontextmenu=function(){return false}
     const self = this;
 
     this.buttonClick();
     this.buttonHover();
     // TODO 以后需要改造
-    G_O_EventEmitter.subscript('LOGIN_SUCCESS', () => {
-      // pickerActions.
-      // const {gameplayData, pickerActions} = self.props;
-      //
-      // pickerActions.changeGameplay(
-      //   gameplayData.gameplayGroups[4].groups[0].actions[1],
-      //   'K3_HZDXDS'
-      // )
-    });
+    // G_O_EventEmitter.subscript('LOGIN_SUCCESS', () => {
+    //   // pickerActions.
+    //   // const {gameplayData, pickerActions} = self.props;
+    //   //
+    //   // pickerActions.changeGameplay(
+    //   //   gameplayData.gameplayGroups[4].groups[0].actions[1],
+    //   //   'K3_HZDXDS'
+    //   // )
+    // });
 
     self.init();
     //self.getCountDownTime();
@@ -967,7 +965,7 @@ class GameLogicLayout extends PickerGameAppClass {
 		return (
       <div className="container-main">
         <div className="dice-top">
-          <DicePanel clientOrders={clientOrders}  timerActions = {this.props.timerActions} lotTimerInfo={this.props.lotTimerInfo} selectedIssue={selectedIssue}
+          <DicePanel selectedLotType={this.selectedLotType}  timerActions = {this.props.timerActions} lotTimerInfo={this.props.lotTimerInfo} selectedIssue={selectedIssue}
             openCodesInfo={this.props.openCodesInfo} chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}  pickerActions={pickerActions}/>
           {/* <DicePanelConnect clientOrders={clientOrders}   chipRecordArr={chipRecordArrState}  chipArr={ chipArrState}/> */}
         </div>

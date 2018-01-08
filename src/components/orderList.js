@@ -1,3 +1,7 @@
+/**
+ * [state 订单查询展示]
+ * @type {Object}
+ */
 import React, {Component} from 'react';
 import propTypes from 'prop-types';
 import {PickerGameAppClass} from './lot.game.basic.helper.js';
@@ -14,6 +18,10 @@ export default class ConfirmWindow extends Component {
   componentDidMount() {
     this.betClick();
   }
+  /**
+   * [betClick 点击事件绑定]
+   * @return {[type]} [description]
+   */
   betClick() {
     var self = this;
     var betbtn = document.getElementsByClassName('button-view');
@@ -29,6 +37,10 @@ export default class ConfirmWindow extends Component {
     }
 
   }
+  /**
+   * [checkOrderList 查询历史订单]
+   * @return {[type]} [description]
+   */
   checkOrderList() {
     var self = this;
       document.getElementsByClassName('order-container')[0].style.visibility = 'visible';
@@ -81,9 +93,6 @@ export default class ConfirmWindow extends Component {
       })
 
   }
-
-
-
   render() {
     var {orderList} = this.state;
     return(

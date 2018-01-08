@@ -167,7 +167,7 @@ export default class ConfirmWindow extends Component {
                           {val.palyType}
                         </div>
                         <div className="item-money orderitem">
-                          {G_F_MoneyFormat(val.multiple)} 元
+                          {val.multiple} 倍
                         </div>
                       </div>
                     )
